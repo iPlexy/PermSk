@@ -2,10 +2,7 @@ package tk.shanebee.skperm.elements.Expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -30,6 +27,7 @@ import java.util.Set;
         "Getting permissions for offline players is not supported.")
 @Examples({"add \"essentials.home\" to permission of player", "add \"essentials.teleport\" to permission of player in world \"world\"",
         "remove \"essentials.tp\" from permission of player"})
+@RequiredPlugins("Vault")
 @Since("1.0.0")
 public class ExprPlayerPerm extends SimpleExpression<String> {
 

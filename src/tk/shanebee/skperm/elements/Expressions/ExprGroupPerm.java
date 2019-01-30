@@ -2,10 +2,7 @@ package tk.shanebee.skperm.elements.Expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer.ChangeMode;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -22,6 +19,7 @@ import tk.shanebee.skperm.SkPerm;
 @Examples({"add \"essentials.chat\" to permissions of group \"members\"",
         "add \"essentials.home\" to permissions of group \"knight\" in world \"world\"",
         "remove \"essentials.gamemode\" from permissions of group \"moderator\""})
+@RequiredPlugins("Vault")
 @Since("1.0.0")
 public class ExprGroupPerm extends SimpleExpression<String> {
 

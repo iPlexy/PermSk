@@ -1,10 +1,7 @@
 package tk.shanebee.skperm.elements.Conditions;
 
 import ch.njol.skript.conditions.base.PropertyCondition;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
@@ -19,6 +16,7 @@ import tk.shanebee.skperm.SkPerm;
 @Description("Check if a player belongs to a group. Worlds are only supported if your permission plugin supports them.")
 @Examples({"if player is in group \"moderator\":", "if player is a member of group \"admin\":",
         "if player is in group \"default\" in world \"world_nether\":"})
+@RequiredPlugins("Vault")
 @Since("1.0.0")
 public class CondPlayerinGroup extends Condition {
 
