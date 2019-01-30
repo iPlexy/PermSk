@@ -70,7 +70,7 @@ public class ExprPlayerPerm extends SimpleExpression<String> {
                     if (perms == null) return;
                     for (String perm : perms) {
                         if (world != null)
-                            manager.playerAdd(world.toString(), p, perm);
+                            manager.playerAdd(world.getSingle(e).getName(), p, perm);
 
                         else
                             manager.playerAdd(null, p, perm);
@@ -80,7 +80,7 @@ public class ExprPlayerPerm extends SimpleExpression<String> {
                     if (perms == null) return;
                     for (String perm : perms) {
                         if (world != null)
-                            manager.playerRemove(world.toString(), p, perm);
+                            manager.playerRemove(world.getSingle(e).getName(), p, perm);
                         else
                             manager.playerRemove(null, p, perm);
                     }

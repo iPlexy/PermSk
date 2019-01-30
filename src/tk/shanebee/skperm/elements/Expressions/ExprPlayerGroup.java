@@ -60,13 +60,13 @@ public class ExprPlayerGroup extends SimpleExpression<OfflinePlayer> {
             switch (mode) {
                 case ADD:
                     if (world != null)
-                        manager.playerAddGroup(world.toString(), player, group.getSingle(e));
+                        manager.playerAddGroup(world.getSingle(e).getName(), player, group.getSingle(e));
                     else
                         manager.playerAddGroup(null, player, group.getSingle(e));
                     break;
                 case REMOVE:
                     if (world != null)
-                        manager.playerRemoveGroup(world.toString(), player, group.getSingle(e));
+                        manager.playerRemoveGroup(world.getSingle(e).getName(), player, group.getSingle(e));
                     else
                         manager.playerRemoveGroup(null, player, group.getSingle(e));
                     break;

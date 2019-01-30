@@ -60,13 +60,13 @@ public class ExprGroupPerm extends SimpleExpression<String> {
             switch (mode) {
                 case ADD:
                     if (world != null)
-                        manager.groupAdd(world.toString(), group.getSingle(e), perm);
+                        manager.groupAdd(world.getSingle(e).getName(), group.getSingle(e), perm);
                     else
                         manager.groupAdd((String) null, group.getSingle(e), perm);
                     break;
                 case REMOVE:
                     if (world != null)
-                        manager.groupRemove(world.toString(), group.getSingle(e), perm);
+                        manager.groupRemove(world.getSingle(e).getName(), group.getSingle(e), perm);
                     else
                         manager.groupRemove((String) null, group.getSingle(e), perm);
                     break;
