@@ -15,18 +15,19 @@ public class SkPerm extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        SkriptAddon addon = Skript.registerAddon(this);
+
         if ((Bukkit.getPluginManager().getPlugin("Skript") != null) && (Skript.isAcceptRegistrations())) {
+            SkriptAddon addon = Skript.registerAddon(this);
             try {
-                addon.loadClasses("tk.shanebee.skperm", "elements");
+                addon.loadClasses("tk.shanebee.skperm.vault", "elements");
                 sendConsoleMessage(prefix + ChatColor.GREEN + "[Skript] Dependency found");
             } catch (Exception e) {
-                e.printStackTrace();
+                sendConsoleMessage(prefix + ChatColor.YELLOW + "[Skript] Dependency not found, plugin disabling");
                 Bukkit.getPluginManager().disablePlugin(this);
             }
             if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
                 setupPermissions();
-                sendConsoleMessage(prefix + ChatColor.GREEN + "[Vault] Dependency found");
+                sendConsoleMessage(prefix + ChatColor.GREEN + "[Vault] Dependency found, Vault syntaxes loaded");
             } else {
                 sendConsoleMessage(prefix + ChatColor.RED + "[Vault] Dependency not found, plugin disabling");
                 Bukkit.getPluginManager().disablePlugin(this);
@@ -34,12 +35,12 @@ public class SkPerm extends JavaPlugin {
             if (Bukkit.getPluginManager().getPlugin("PermissionsEX") != null) {
                 try {
                     addon.loadClasses("tk.shanebee.skperm.pex", "elements");
-                    sendConsoleMessage(prefix + ChatColor.GREEN + "[PEX] Dependency found, pex syntax loaded");
+                    sendConsoleMessage(prefix + ChatColor.GREEN + "[PEX] Dependency found, PEX syntaxes loaded");
                 } catch (Exception e) {
                     sendConsoleMessage(prefix + ChatColor.RED + "[PEX] Loading error, try restart your server");
                 }
             } else {
-                sendConsoleMessage(prefix + ChatColor.YELLOW + "[PEX] Dependency not found, ignoring pex syntaxes");
+                sendConsoleMessage(prefix + ChatColor.YELLOW + "[PEX] Dependency not found, ignoring PEX syntaxes");
             }
             sendConsoleMessage(prefix + ChatColor.GREEN + "Loaded successfully");
         } else {
