@@ -16,17 +16,17 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 @Name("PEX: Permissions of Player")
 @Description("Returns a list of all the player's permissions with an option to get the permissions for a specific world.")
-@Examples({"set {_perms::*} to permissions of player",
-        "set {_perms::*} to permissions of player in \"world\"",
-        "send \"Perms in %world of player%: %permissions of player in world of player%\""})
+@Examples({"set {_perms::*} to all permissions of player",
+        "set {_perms::*} to all permissions of player in \"world\"",
+        "send \"Perms in %world of player%: %all permissions of player in world of player%\""})
 @RequiredPlugins({"PermissionsEX", "Vault"})
 @Since("1.1.0")
 public class ExprPermsOfPlayer extends SimpleExpression<String> {
 
     static {
         Skript.registerExpression(ExprPermsOfPlayer.class, String.class, ExpressionType.PROPERTY,
-                "[all] permission[s] of %offlineplayer% [in [world] %-world%]",
-                "%offlineplayer%'s permission[s] [in [world] %-world%]");
+                "all permission[s] of %offlineplayer% [in [world] %-world%]",
+                "all of %offlineplayer%'s permission[s] [in [world] %-world%]");
     }
 
     private Expression<OfflinePlayer> player;

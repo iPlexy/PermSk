@@ -17,15 +17,15 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 @Description("Returns a list of all the group's permissions with an option to get the permissions for a specific world.")
 @Examples({"set {_perms::*} to all permissions of group \"mod\"",
         "set {_perms::*} to all permissions of group \"builder\" in world \"world\"",
-        "send \"Perms in %world of player%: %permissions of group \"\"admin\"\" in world of player%\""})
+        "send \"Perms in %world of player%: %all permissions of group \"\"admin\"\" in world of player%\""})
 @RequiredPlugins({"Vault", "PermissionsEX"})
 @Since("1.1.0")
 public class ExprPermsOfGroup extends SimpleExpression<String> {
 
     static {
         Skript.registerExpression(ExprPermsOfGroup.class, String.class, ExpressionType.PROPERTY,
-                "[all] permission[s] of group %string% [in [world] %-world%]",
-                "group %string%'s permission[s] [in [world] %-world%]");
+                "all permission[s] of group %string% [in [world] %-world%]",
+                "all of group %string%'s permission[s] [in [world] %-world%]");
     }
 
     private Expression<String> group;
