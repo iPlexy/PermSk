@@ -28,8 +28,8 @@ import java.util.Set;
 @Name("Permission: Player's Permissions")
 @Description("Add or remove permissions of a player. Worlds are only supported if your permission plugin supports them." +
         "Getting permissions for offline players is not supported.")
-@Examples({"add \"essentials.home\" to permission of %player%", "add \"essentials.teleport\" to permission of %player% in world \"world\"",
-        "remove \"essentials.tp\" from permission of %player%"})
+@Examples({"add \"essentials.home\" to permission of player", "add \"essentials.teleport\" to permission of player in world \"world\"",
+        "remove \"essentials.tp\" from permission of player"})
 @Since("1.0.0")
 public class ExprPlayerPerm extends SimpleExpression<String> {
 

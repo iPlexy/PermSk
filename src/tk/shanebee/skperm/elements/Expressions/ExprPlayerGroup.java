@@ -22,8 +22,8 @@ import tk.shanebee.skperm.SkPerm;
 @Name("Permission: Group's Players")
 @Description("Add or remove player's to/from groups. Vault does not seem to allow getting players of a group. " +
         "Worlds are only supported if your permission plugin supports them.")
-@Examples({"add %player% to group \"Admin\"", "remove %player% from group \"Moderator\"",
-        "add %player% to group \"member\" in \"world\"", "remove %player% from group \"default\" in world \"world_nether\""})
+@Examples({"add player to group \"Admin\"", "remove player from group \"Moderator\"",
+        "add player to group \"member\" in \"world\"", "remove player from group \"default\" in world \"world_nether\""})
 @Since("1.0.0")
 public class ExprPlayerGroup extends SimpleExpression<OfflinePlayer> {
 
