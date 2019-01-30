@@ -13,7 +13,7 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 import java.util.LinkedList;
 import java.util.List;
 
-@Name("Pex: Create Group")
+@Name("PEX: Create Group")
 @Description("Create a new PEX group. Optional parents can be added.")
 @Examples({"pex create new group \"default\"",
         "pex create new group \"moderator\" with parent \"default\"",
