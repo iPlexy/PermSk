@@ -1,10 +1,7 @@
 package tk.shanebee.skperm.pex.elements.effects;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
@@ -21,6 +18,7 @@ import java.util.List;
 @Examples({"pex create new group \"default\"",
         "pex create new group \"moderator\" with parent \"default\"",
         "pex remove group \"moderator\""})
+@RequiredPlugins({"PermissionsEX", "Vault"})
 @Since("1.1.0")
 public class EffCreateGroup extends Effect {
 
