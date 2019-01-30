@@ -19,19 +19,29 @@ public class SkPerm extends JavaPlugin {
         if ((Bukkit.getPluginManager().getPlugin("Skript") != null) && (Skript.isAcceptRegistrations())) {
             try {
                 addon.loadClasses("tk.shanebee.skperm", "elements");
-                Bukkit.getConsoleSender().sendMessage(prefix + ChatColor.GREEN + "[Skript] Dependency found");
+                sendConsoleMessage(prefix + ChatColor.GREEN + "[Skript] Dependency found");
             } catch (Exception e) {
                 e.printStackTrace();
                 Bukkit.getPluginManager().disablePlugin(this);
             }
             if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
                 setupPermissions();
-                Bukkit.getConsoleSender().sendMessage(prefix + ChatColor.GREEN + "[Vault] Dependency found");
-                Bukkit.getConsoleSender().sendMessage(prefix + ChatColor.GREEN + "Loaded successfully");
+                sendConsoleMessage(prefix + ChatColor.GREEN + "[Vault] Dependency found");
             } else {
-                Bukkit.getConsoleSender().sendMessage(prefix + ChatColor.RED + "[Vault] Dependency not found, plugin disabling");
+                sendConsoleMessage(prefix + ChatColor.RED + "[Vault] Dependency not found, plugin disabling");
                 Bukkit.getPluginManager().disablePlugin(this);
             }
+            if (Bukkit.getPluginManager().getPlugin("PermissionsEX") != null) {
+                try {
+                    addon.loadClasses("tk.shanebee.skperm.pex", "elements");
+                    sendConsoleMessage(prefix + ChatColor.GREEN + "[PEX] Dependency found, pex syntax loaded");
+                } catch (Exception e) {
+                    sendConsoleMessage(prefix + ChatColor.RED + "[PEX] Loading error, try restart your server");
+                }
+            } else {
+                sendConsoleMessage(prefix + ChatColor.YELLOW + "[PEX] Dependency not found, ignoring pex syntaxes");
+            }
+            sendConsoleMessage(prefix + ChatColor.GREEN + "Loaded successfully");
         } else {
             getLogger().info(ChatColor.RED + "[Skript] Dependency was not found, plugin disabling");
             Bukkit.getPluginManager().disablePlugin(this);
@@ -40,13 +50,17 @@ public class SkPerm extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        Bukkit.getConsoleSender().sendMessage(prefix + "Unloaded successfully");
+        sendConsoleMessage(prefix + "Unloaded successfully");
     }
 
     private boolean setupPermissions() {
         RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
         perms = rsp.getProvider();
         return perms != null;
+    }
+
+    private void sendConsoleMessage(String message) {
+        Bukkit.getConsoleSender().sendMessage(message);
     }
 
 }
