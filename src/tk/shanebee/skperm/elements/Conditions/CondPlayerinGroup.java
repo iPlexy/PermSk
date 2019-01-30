@@ -44,10 +44,8 @@ public class CondPlayerinGroup extends Condition {
 
     @Override
     public boolean check(Event e) {
-        if (world != null)
-            return manager.playerInGroup(world.getSingle(e).getName(), player.getSingle(e), group.toString());
-        else
-            return manager.playerInGroup(null, player.getSingle(e), group.toString());
+        String w = world == null ? null : world.getSingle(e).getName();
+        return manager.playerInGroup(w, player.getSingle(e), group.toString());
     }
 
     @Override

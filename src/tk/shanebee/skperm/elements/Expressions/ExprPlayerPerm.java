@@ -62,25 +62,19 @@ public class ExprPlayerPerm extends SimpleExpression<String> {
     @Override
     public void change(Event e, Object[] delta, Changer.ChangeMode mode) {
         String[] perms = delta != null ? (String[]) delta : null;
+        String w = world == null ? null : world.getSingle(e).getName();
         for (OfflinePlayer p : players.getArray(e)) {
             switch(mode) {
                 case ADD:
                     if (perms == null) return;
                     for (String perm : perms) {
-                        if (world != null)
-                            manager.playerAdd(world.getSingle(e).getName(), p, perm);
-
-                        else
-                            manager.playerAdd(null, p, perm);
+                        manager.playerAdd(w, p, perm);
                     }
                     break;
                 case REMOVE:
                     if (perms == null) return;
                     for (String perm : perms) {
-                        if (world != null)
-                            manager.playerRemove(world.getSingle(e).getName(), p, perm);
-                        else
-                            manager.playerRemove(null, p, perm);
+                        manager.playerRemove(w, p, perm);
                     }
                     break;
             }
