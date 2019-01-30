@@ -8,25 +8,34 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
+import ch.njol.util.coll.CollectionUtils;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.event.Event;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
+import tk.shanebee.skperm.SkPerm;
 
 @Name("PEX: Permissions of Player")
-@Description("Returns a list of all the player's permissions with an option to get the permissions for a specific world.")
+@Description("Returns a list of all the player's permissions with an option to get the permissions for a specific world. " +
+        "You can also add/remove permissions to/from a player.")
 @Examples({"set {_perms::*} to all permissions of player",
         "set {_perms::*} to all permissions of player in \"world\"",
-        "send \"Perms in %world of player%: %all permissions of player in world of player%\""})
+        "send \"Perms in %world of player%: %all permissions of player in world of player%\"",
+        "add \"essentials.chat\" to permissions of player",
+        "add \"essentials.fly\" to permissions of player in world of player",
+        "remove \"essentials.fly\" from permissions of player"})
 @RequiredPlugins({"PermissionsEX", "Vault"})
 @Since("1.1.0")
 public class ExprPermsOfPlayer extends SimpleExpression<String> {
 
+    private Permission manager = SkPerm.perms;
+
     static {
         Skript.registerExpression(ExprPermsOfPlayer.class, String.class, ExpressionType.PROPERTY,
-                "all permission[s] of %offlineplayer% [in [world] %-world%]",
-                "all of %offlineplayer%'s permission[s] [in [world] %-world%]");
+                "perm[ission][s] of %offlineplayer% [in [world] %-world%]",
+                "%offlineplayer%'s perm[ission][s] [in [world] %-world%]");
     }
 
     private Expression<OfflinePlayer> player;
@@ -42,7 +51,31 @@ public class ExprPermsOfPlayer extends SimpleExpression<String> {
 
     @Override
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
+        if (mode == Changer.ChangeMode.ADD || mode == Changer.ChangeMode.REMOVE) {
+            return CollectionUtils.array(String.class);
+        }
         return null;
+    }
+
+    @Override
+    public void change(Event e, Object[] delta, Changer.ChangeMode mode) {
+        String[] perms = delta != null ? (String[]) delta : null;
+        String w = world == null ? null : world.getSingle(e).getName();
+        switch (mode) {
+            case ADD:
+                if (perms == null) return;
+                for (String perm : perms) {
+                    manager.playerAdd(w, player.getSingle(e), perm);
+                }
+                break;
+            case REMOVE:
+                if (perms == null) return;
+                for (String perm : perms) {
+                    manager.playerRemove(w, player.getSingle(e), perm);
+                }
+                break;
+        }
+
     }
 
     @Override

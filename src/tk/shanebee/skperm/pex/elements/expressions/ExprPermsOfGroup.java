@@ -8,24 +8,32 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
+import ch.njol.util.coll.CollectionUtils;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.World;
 import org.bukkit.event.Event;
 import ru.tehkode.permissions.PermissionGroup;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
+import tk.shanebee.skperm.SkPerm;
 
 @Name("PEX: Permissions of Group")
-@Description("Returns a list of all the group's permissions with an option to get the permissions for a specific world.")
+@Description("Returns a list of all the group's permissions with an option to get the permissions for a specific world. " +
+        "You can also add/remove permissions to/group a group")
 @Examples({"set {_perms::*} to all permissions of group \"mod\"",
         "set {_perms::*} to all permissions of group \"builder\" in world \"world\"",
-        "send \"Perms in %world of player%: %all permissions of group \"\"admin\"\" in world of player%\""})
+        "send \"Perms in %world of player%: %all permissions of group \"\"admin\"\" in world of player%\"",
+        "add \"essentials.fly\" to permissions of group \"builder\" in world \"world\"",
+        "remove \"essentials.fly\" from permissions of group \"mod\""})
 @RequiredPlugins({"Vault", "PermissionsEX"})
 @Since("1.1.0")
 public class ExprPermsOfGroup extends SimpleExpression<String> {
 
+    private Permission manager = SkPerm.perms;
+
     static {
         Skript.registerExpression(ExprPermsOfGroup.class, String.class, ExpressionType.PROPERTY,
-                "all permission[s] of group %string% [in [world] %-world%]",
-                "all of group %string%'s permission[s] [in [world] %-world%]");
+                "perm[ission][s] of group %string% [in [world] %-world%]",
+                "group %string%'s perm[ission][s] [in [world] %-world%]");
     }
 
     private Expression<String> group;
@@ -41,7 +49,26 @@ public class ExprPermsOfGroup extends SimpleExpression<String> {
 
     @Override
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
+        if (mode == Changer.ChangeMode.ADD || mode == Changer.ChangeMode.REMOVE) {
+            return CollectionUtils.array(String.class);
+        }
         return null;
+    }
+
+    @Override
+    public void change(Event e, Object[] delta, Changer.ChangeMode mode) {
+        String[] perms = (String[]) delta;
+        String w = world == null ? null : world.getSingle(e).getName();
+        for (String perm : perms) {
+            switch (mode) {
+                case ADD:
+                    manager.groupAdd(w, group.getSingle(e), perm);
+                    break;
+                case REMOVE:
+                    manager.groupRemove(w, group.getSingle(e), perm);
+                    break;
+            }
+        }
     }
 
     @Override
