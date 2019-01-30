@@ -1,4 +1,4 @@
-package tk.shanebee.skperm.elements.Expressions;
+package tk.shanebee.skperm.vault.elements.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer.ChangeMode;
@@ -10,30 +10,31 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import net.milkbowl.vault.permission.Permission;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import tk.shanebee.skperm.SkPerm;
 
-@Name("Permission: Group's Permissions")
-@Description("Add or remove permissions to/from a group. Worlds are only supported if your permission plugin supports them.")
-@Examples({"add \"essentials.chat\" to permissions of group \"members\"",
-        "add \"essentials.home\" to permissions of group \"knight\" in world \"world\"",
-        "remove \"essentials.gamemode\" from permissions of group \"moderator\""})
+@Name("Permission: Group's Players")
+@Description("Add or remove player's to/from groups. Vault does not seem to allow getting players of a group. " +
+        "Worlds are only supported if your permission plugin supports them.")
+@Examples({"add player to group \"Admin\"", "remove player from group \"Moderator\"",
+        "add player to group \"member\" in \"world\"", "remove player from group \"default\" in world \"world_nether\""})
 @RequiredPlugins("Vault")
 @Since("1.0.0")
-public class ExprGroupPerm extends SimpleExpression<String> {
+public class ExprPlayerGroup extends SimpleExpression<OfflinePlayer> {
 
     private Permission manager = SkPerm.perms;
 
     static {
-        Skript.registerExpression(ExprGroupPerm.class, String.class, ExpressionType.PROPERTY,
-                "perm[ission][s] of group %string% [in [world]%-world%]",
-                "group %string%'s perm[ission][s] [in [world]%-world%]");
+        Skript.registerExpression(ExprPlayerGroup.class, OfflinePlayer.class, ExpressionType.PROPERTY,
+                "group %string% [in [world] %-world%]");
     }
 
     @SuppressWarnings("null")
-    private Expression<String> group;
     private Expression<World> world;
+    private Expression<String> group;
 
     @SuppressWarnings({"null", "unchecked"})
     @Override
@@ -46,30 +47,25 @@ public class ExprGroupPerm extends SimpleExpression<String> {
     @Override
     public Class<?>[] acceptChange(ChangeMode mode) {
         if (mode == ChangeMode.ADD || mode == ChangeMode.REMOVE) {
-            return CollectionUtils.array(String.class);
+            return CollectionUtils.array(Player.class);
         }
         return null;
     }
 
     @Override
     public void change(Event e, Object[] delta, ChangeMode mode) {
-        String[] perms = (String[]) delta;
+        OfflinePlayer[] players = (OfflinePlayer[]) delta;
         String w = world == null ? null : world.getSingle(e).getName();
-        for (String perm : perms) {
+        for (OfflinePlayer player : players) {
             switch (mode) {
                 case ADD:
-                    manager.groupAdd(w, group.getSingle(e), perm);
+                    manager.playerAddGroup(w, player, group.getSingle(e));
                     break;
                 case REMOVE:
-                    manager.groupRemove(w, group.getSingle(e), perm);
+                    manager.playerRemoveGroup(w, player, group.getSingle(e));
                     break;
             }
         }
-    }
-
-    @Override
-    protected String[] get(Event event) {
-        return null;
     }
 
     @Override
@@ -78,14 +74,18 @@ public class ExprGroupPerm extends SimpleExpression<String> {
     }
 
     @Override
-    public Class<? extends String> getReturnType() {
-        return String.class;
+    public Class<? extends OfflinePlayer> getReturnType() {
+        return OfflinePlayer.class;
     }
 
     @Override
     public String toString(Event event, boolean debug) {
-        return "permission of group " + group.toString(event, debug);
+        return "group " + group.toString(event, debug);
+    }
+
+    @Override
+    protected Player[] get(Event event) {
+        return null;
     }
 
 }
-

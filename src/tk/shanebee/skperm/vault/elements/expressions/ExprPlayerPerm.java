@@ -1,4 +1,4 @@
-package tk.shanebee.skperm.elements.Expressions;
+package tk.shanebee.skperm.vault.elements.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;

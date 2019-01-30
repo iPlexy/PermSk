@@ -1,4 +1,4 @@
-package tk.shanebee.skperm.elements.Conditions;
+package tk.shanebee.skperm.vault.elements.conditions;
 
 import ch.njol.skript.conditions.base.PropertyCondition;
 import ch.njol.skript.doc.*;

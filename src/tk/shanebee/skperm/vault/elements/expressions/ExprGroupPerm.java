@@ -1,4 +1,4 @@
-package tk.shanebee.skperm.elements.Expressions;
+package tk.shanebee.skperm.vault.elements.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer.ChangeMode;
@@ -10,31 +10,30 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import net.milkbowl.vault.permission.Permission;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import tk.shanebee.skperm.SkPerm;
 
-@Name("Permission: Group's Players")
-@Description("Add or remove player's to/from groups. Vault does not seem to allow getting players of a group. " +
-        "Worlds are only supported if your permission plugin supports them.")
-@Examples({"add player to group \"Admin\"", "remove player from group \"Moderator\"",
-        "add player to group \"member\" in \"world\"", "remove player from group \"default\" in world \"world_nether\""})
+@Name("Permission: Group's Permissions")
+@Description("Add or remove permissions to/from a group. Worlds are only supported if your permission plugin supports them.")
+@Examples({"add \"essentials.chat\" to permissions of group \"members\"",
+        "add \"essentials.home\" to permissions of group \"knight\" in world \"world\"",
+        "remove \"essentials.gamemode\" from permissions of group \"moderator\""})
 @RequiredPlugins("Vault")
 @Since("1.0.0")
-public class ExprPlayerGroup extends SimpleExpression<OfflinePlayer> {
+public class ExprGroupPerm extends SimpleExpression<String> {
 
     private Permission manager = SkPerm.perms;
 
     static {
-        Skript.registerExpression(ExprPlayerGroup.class, OfflinePlayer.class, ExpressionType.PROPERTY,
-                "group %string% [in [world] %-world%]");
+        Skript.registerExpression(ExprGroupPerm.class, String.class, ExpressionType.PROPERTY,
+                "perm[ission][s] of group %string% [in [world]%-world%]",
+                "group %string%'s perm[ission][s] [in [world]%-world%]");
     }
 
     @SuppressWarnings("null")
-    private Expression<World> world;
     private Expression<String> group;
+    private Expression<World> world;
 
     @SuppressWarnings({"null", "unchecked"})
     @Override
@@ -47,25 +46,30 @@ public class ExprPlayerGroup extends SimpleExpression<OfflinePlayer> {
     @Override
     public Class<?>[] acceptChange(ChangeMode mode) {
         if (mode == ChangeMode.ADD || mode == ChangeMode.REMOVE) {
-            return CollectionUtils.array(Player.class);
+            return CollectionUtils.array(String.class);
         }
         return null;
     }
 
     @Override
     public void change(Event e, Object[] delta, ChangeMode mode) {
-        OfflinePlayer[] players = (OfflinePlayer[]) delta;
+        String[] perms = (String[]) delta;
         String w = world == null ? null : world.getSingle(e).getName();
-        for (OfflinePlayer player : players) {
+        for (String perm : perms) {
             switch (mode) {
                 case ADD:
-                    manager.playerAddGroup(w, player, group.getSingle(e));
+                    manager.groupAdd(w, group.getSingle(e), perm);
                     break;
                 case REMOVE:
-                    manager.playerRemoveGroup(w, player, group.getSingle(e));
+                    manager.groupRemove(w, group.getSingle(e), perm);
                     break;
             }
         }
+    }
+
+    @Override
+    protected String[] get(Event event) {
+        return null;
     }
 
     @Override
@@ -74,18 +78,14 @@ public class ExprPlayerGroup extends SimpleExpression<OfflinePlayer> {
     }
 
     @Override
-    public Class<? extends OfflinePlayer> getReturnType() {
-        return OfflinePlayer.class;
+    public Class<? extends String> getReturnType() {
+        return String.class;
     }
 
     @Override
     public String toString(Event event, boolean debug) {
-        return "group " + group.toString(event, debug);
-    }
-
-    @Override
-    protected Player[] get(Event event) {
-        return null;
+        return "permission of group " + group.toString(event, debug);
     }
 
 }
+
