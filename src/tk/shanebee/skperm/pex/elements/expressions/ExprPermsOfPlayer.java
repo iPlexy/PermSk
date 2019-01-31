@@ -22,7 +22,7 @@ import java.util.Arrays;
 
 @Name("PEX: Permissions of Player")
 @Description("Returns a list of all the player's permissions with an option to get the permissions for a specific world. " +
-        "You can also add/remove permissions to/from a player.")
+        "You can also add/remove permissions to/from a player (Supports lists of permissions/strings)")
 @Examples({"set {_perms::*} to all permissions of player",
         "set {_perms::*} to all permissions of player in \"world\"",
         "send \"Perms in %world of player%: %all permissions of player in world of player%\"",

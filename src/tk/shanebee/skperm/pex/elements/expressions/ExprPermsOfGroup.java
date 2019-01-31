@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 @Name("PEX: Permissions of Group")
 @Description("Returns a list of all the group's permissions with an option to get the permissions for a specific world. " +
-        "You can also add/remove permissions to/group a group")
+        "You can also add/remove permissions to/group a group (Supports lists of permissions/strings)")
 @Examples({"set {_perms::*} to all permissions of group \"mod\"",
         "set {_perms::*} to all permissions of group \"builder\" in world \"world\"",
         "send \"Perms in %world of player%: %all permissions of group \"\"admin\"\" in world of player%\"",
