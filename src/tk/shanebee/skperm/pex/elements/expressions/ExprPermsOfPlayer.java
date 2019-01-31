@@ -7,6 +7,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
+import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import net.milkbowl.vault.permission.Permission;
@@ -16,6 +17,8 @@ import org.bukkit.event.Event;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 import tk.shanebee.skperm.SkPerm;
+
+import java.util.Arrays;
 
 @Name("PEX: Permissions of Player")
 @Description("Returns a list of all the player's permissions with an option to get the permissions for a specific world. " +
@@ -34,38 +37,46 @@ public class ExprPermsOfPlayer extends SimpleExpression<String> {
 
     static {
         Skript.registerExpression(ExprPermsOfPlayer.class, String.class, ExpressionType.PROPERTY,
-                "perm[ission][s] of %offlineplayer% [in [world] %-world%]",
-                "%offlineplayer%'s perm[ission][s] [in [world] %-world%]");
+                "perm[ission][s] of %offlineplayer% [in [world] %-world%] [for %-timespan%]",
+                "%offlineplayer%'s perm[ission][s] [in [world] %-world%] [for %-timespan%]");
     }
 
     private Expression<OfflinePlayer> player;
     private Expression<World> world;
+    private Expression<Timespan> time;
 
     @SuppressWarnings({"unchecked"})
     @Override
     public boolean init(Expression<?>[] exprs, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
         player = (Expression<OfflinePlayer>) exprs[0];
         world = (Expression<World>) exprs[1];
+        time = (Expression<Timespan>) exprs[2];
         return true;
     }
 
     @Override
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
         if (mode == Changer.ChangeMode.ADD || mode == Changer.ChangeMode.REMOVE) {
-            return CollectionUtils.array(String.class);
+            return CollectionUtils.array(String[].class);
         }
         return null;
     }
 
     @Override
     public void change(Event e, Object[] delta, Changer.ChangeMode mode) {
-        String[] perms = delta != null ? (String[]) delta : null;
+        String[] perms = delta == null ? null : Arrays.copyOf(delta, delta.length, String[].class);
         String w = world == null ? null : world.getSingle(e).getName();
+        int sec = time == null ? 0 : ((int) time.getSingle(e).getTicks_i() / 20);
         switch (mode) {
             case ADD:
                 if (perms == null) return;
                 for (String perm : perms) {
-                    manager.playerAdd(w, player.getSingle(e), perm);
+                    if (sec == 0) {
+                        manager.playerAdd(w, player.getSingle(e), perm);
+                    }
+                    else {
+                        PermissionsEx.getUser(player.getSingle(e).getName()).addTimedPermission(perm, w, sec);
+                    }
                 }
                 break;
             case REMOVE:
@@ -75,7 +86,6 @@ public class ExprPermsOfPlayer extends SimpleExpression<String> {
                 }
                 break;
         }
-
     }
 
     @Override

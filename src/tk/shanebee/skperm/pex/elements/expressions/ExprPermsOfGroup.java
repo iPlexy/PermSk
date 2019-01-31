@@ -7,6 +7,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
+import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import net.milkbowl.vault.permission.Permission;
@@ -15,6 +16,8 @@ import org.bukkit.event.Event;
 import ru.tehkode.permissions.PermissionGroup;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 import tk.shanebee.skperm.SkPerm;
+
+import java.util.Arrays;
 
 @Name("PEX: Permissions of Group")
 @Description("Returns a list of all the group's permissions with an option to get the permissions for a specific world. " +
@@ -32,37 +35,44 @@ public class ExprPermsOfGroup extends SimpleExpression<String> {
 
     static {
         Skript.registerExpression(ExprPermsOfGroup.class, String.class, ExpressionType.PROPERTY,
-                "perm[ission][s] of group %string% [in [world] %-world%]",
-                "group %string%'s perm[ission][s] [in [world] %-world%]");
+                "perm[ission][s] of group %string% [in [world] %-world%] [for %-timespan%]",
+                "group %string%'s perm[ission][s] [in [world] %-world%] [for %-timespan%]");
     }
 
     private Expression<String> group;
     private Expression<World> world;
+    private Expression<Timespan> time;
 
     @SuppressWarnings({"unchecked"})
     @Override
     public boolean init(Expression<?>[] exprs, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
         group = (Expression<String>) exprs[0];
         world = (Expression<World>) exprs[1];
+        time = (Expression<Timespan>) exprs[2];
         return true;
     }
 
     @Override
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
         if (mode == Changer.ChangeMode.ADD || mode == Changer.ChangeMode.REMOVE) {
-            return CollectionUtils.array(String.class);
+            return CollectionUtils.array(String[].class);
         }
         return null;
     }
 
     @Override
     public void change(Event e, Object[] delta, Changer.ChangeMode mode) {
-        String[] perms = (String[]) delta;
+        String[] perms = delta == null ? null : Arrays.copyOf(delta, delta.length, String[].class);
         String w = world == null ? null : world.getSingle(e).getName();
+        int sec = time == null ? 0 : ((int) time.getSingle(e).getTicks_i() / 20);
+        if (perms == null) return;
         for (String perm : perms) {
             switch (mode) {
                 case ADD:
-                    manager.groupAdd(w, group.getSingle(e), perm);
+                    if (sec == 0)
+                        manager.groupAdd(w, group.getSingle(e), perm);
+                    else
+                        PermissionsEx.getPermissionManager().getGroup(group.getSingle(e)).addTimedPermission(perm, w, sec);
                     break;
                 case REMOVE:
                     manager.groupRemove(w, group.getSingle(e), perm);
