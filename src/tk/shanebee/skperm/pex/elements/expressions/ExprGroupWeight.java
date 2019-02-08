@@ -10,16 +10,17 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import org.bukkit.event.Event;
-import ru.tehkode.permissions.PermissionGroup;
-import ru.tehkode.permissions.bukkit.PermissionsEx;
+import tk.shanebee.skperm.SkPerm;
+import tk.shanebee.skperm.utils.api.API;
 
-@Name("PEX: Group Weight")
-@Description("Set the weight of a group.")
+@Name("Permission: Group Weight")
+@Description("Set the weight of a group, also supports add, remove, reset and get. Currently only supports PEX")
 @Examples({"set weight of group \"owner\" to 1", "set weight of group \"admin\" to 100",
         "reset weight of group \"default\"", "set {_weight} to weight of group \"admin\""})
-@RequiredPlugins({"Vault", "PermissionsEX"})
-@Since("1.1.0")
+@Since("2.0.0")
 public class ExprGroupWeight extends SimpleExpression<Number> {
+
+    API api = SkPerm.getAPI();
 
     static {
         Skript.registerExpression(ExprGroupWeight.class, Number.class, ExpressionType.PROPERTY,
@@ -37,7 +38,7 @@ public class ExprGroupWeight extends SimpleExpression<Number> {
 
     @Override
     public Class<?>[] acceptChange(ChangeMode mode) {
-        if (mode == ChangeMode.SET || mode == ChangeMode.REMOVE || mode == ChangeMode.RESET) {
+        if (mode == ChangeMode.SET || mode == ChangeMode.REMOVE || mode == ChangeMode.RESET || mode == ChangeMode.ADD) {
             return CollectionUtils.array(Number.class);
         }
         return null;
@@ -45,21 +46,28 @@ public class ExprGroupWeight extends SimpleExpression<Number> {
 
     @Override
     protected Number[] get(Event e) {
-        PermissionGroup group = PermissionsEx.getPermissionManager().getGroup(this.group.getSingle(e));
-        return CollectionUtils.array(group.getWeight());
+        return CollectionUtils.array(api.getGroupWeight(this.group.getSingle(e)));
     }
 
     @Override
     public void change(Event e, Object[] delta, ChangeMode mode) {
-        PermissionGroup group = PermissionsEx.getPermissionManager().getGroup(this.group.getSingle(e));
-        Number weight = (Number) delta[0];
+        String group = this.group.getSingle(e);
+        Number weight = delta != null ? (Number) delta[0] : 0;
+        int oldWeight;
         switch (mode) {
             case SET:
-                group.setWeight(weight.intValue());
+                api.setGroupWeight(group, weight.intValue());
+                break;
+            case ADD:
+                oldWeight = api.getGroupWeight(group);
+                api.setGroupWeight(group, (oldWeight + weight.intValue()));
                 break;
             case REMOVE:
+                oldWeight = api.getGroupWeight(group);
+                api.setGroupWeight(group, (oldWeight - weight.intValue()));
+                break;
             case RESET:
-                group.setWeight(0);
+                api.setGroupWeight(group, 0);
         }
     }
 
