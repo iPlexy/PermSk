@@ -20,7 +20,7 @@ import tk.shanebee.skperm.utils.api.API;
 @Since("2.0.0")
 public class ExprGroupRank extends SimpleExpression<Number> {
 
-    API api = SkPerm.getAPI();
+    private API api = SkPerm.getAPI();
 
     static {
         Skript.registerExpression(ExprGroupRank.class, Number.class, ExpressionType.PROPERTY,
