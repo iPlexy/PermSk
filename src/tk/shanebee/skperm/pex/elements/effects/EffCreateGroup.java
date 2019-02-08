@@ -7,24 +7,22 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 import org.bukkit.event.Event;
-import ru.tehkode.permissions.PermissionGroup;
-import ru.tehkode.permissions.bukkit.PermissionsEx;
+import tk.shanebee.skperm.SkPerm;
+import tk.shanebee.skperm.utils.api.API;
 
-import java.util.LinkedList;
-import java.util.List;
-
-@Name("PEX: Create Group")
-@Description("Create a new PEX group. Optional parents can be added.")
-@Examples({"pex create new group \"default\"",
-        "pex create new group \"moderator\" with parent \"default\"",
-        "pex remove group \"moderator\""})
-@RequiredPlugins({"PermissionsEX", "Vault"})
-@Since("1.1.0")
+@Name("Permission: Create Group")
+@Description("Create a new permission group. Optional parents can be added. Currently supports PEX")
+@Examples({"create new group \"default\"",
+        "create new group \"moderator\" with parent \"default\"", "create new group \"admin\" with parents \"moderator\" and \"default\"",
+        "remove group \"moderator\""})
+@Since("2.0.0")
 public class EffCreateGroup extends Effect {
+
+    API api = SkPerm.getAPI();
 
     static {
         Skript.registerEffect(EffCreateGroup.class,
-                "[pex] (0¦create [new]|1¦(delete|remove)) group %string% [with parent[s] %-strings%]");
+                "(0¦create [new]|1¦(delete|remove)) group %string% [with parent[s] %-strings%]");
     }
 
     private Expression<String> group;
@@ -42,25 +40,21 @@ public class EffCreateGroup extends Effect {
 
     @Override
     protected void execute(Event e) {
-        PermissionGroup group = PermissionsEx.getPermissionManager().getGroup(this.group.getSingle(e));
-        List<PermissionGroup> groups = new LinkedList<>();
         if (parse == 0) {
             if (parents != null) {
-                for (String parent : parents.getAll(e)) {
-                    groups.add(PermissionsEx.getPermissionManager().getGroup(parent));
-                }
-                group.setParents(groups, null);
+                api.createGroup(this.group.getSingle(e), parents.getArray(e));
+            } else {
+                api.createGroup(this.group.getSingle(e));
             }
-            group.save();
         } else {
-            group.remove();
+            api.removeGroup(this.group.getSingle(e));
         }
     }
 
     @Override
     public String toString(Event e, boolean d) {
-        return "pex " + (parse == 0 ? "create new " : " delete") + "group " + group.toString(e, d) +
-                (parents != null ? "with parents " + parents.toString(e, d) : "");
+        return (parse == 0 ? "create new" : " delete") + " group " + group.toString(e, d) +
+                (parents != null ? " with parents " + parents.toString(e, d) : "");
     }
 
 }
