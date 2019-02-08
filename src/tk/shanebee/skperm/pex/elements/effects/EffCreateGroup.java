@@ -10,15 +10,15 @@ import org.bukkit.event.Event;
 import tk.shanebee.skperm.SkPerm;
 import tk.shanebee.skperm.utils.api.API;
 
-@Name("Permission: Create Group")
-@Description("Create a new permission group. Optional parents can be added. Currently supports PEX")
+@Name("Permission: Create/Delete Group")
+@Description("Create a new permission group or remove one. Optional parents can be added. Currently supports PEX")
 @Examples({"create new group \"default\"",
         "create new group \"moderator\" with parent \"default\"", "create new group \"admin\" with parents \"moderator\" and \"default\"",
         "remove group \"moderator\""})
 @Since("2.0.0")
 public class EffCreateGroup extends Effect {
 
-    API api = SkPerm.getAPI();
+    private API api = SkPerm.getAPI();
 
     static {
         Skript.registerEffect(EffCreateGroup.class,
