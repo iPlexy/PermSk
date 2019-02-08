@@ -7,10 +7,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import tk.shanebee.skperm.utils.api.API;
+import tk.shanebee.skperm.utils.api.PexAPI;
 
 public class SkPerm extends JavaPlugin {
 
     public static Permission perms = null;
+    private static API api;
     private String prefix = ChatColor.translateAlternateColorCodes('&', "&7[&bSk-Perm&7] ");
 
     @Override
@@ -22,8 +25,9 @@ public class SkPerm extends JavaPlugin {
                 addon.loadClasses("tk.shanebee.skperm.vault", "elements");
                 sendConsoleMessage(prefix + ChatColor.GREEN + "[Skript] Dependency found");
             } catch (Exception e) {
-                sendConsoleMessage(prefix + ChatColor.YELLOW + "[Skript] Dependency not found, plugin disabling");
+                sendConsoleMessage(prefix + ChatColor.RED + "Loading error, try restarting your server");
                 Bukkit.getPluginManager().disablePlugin(this);
+                return;
             }
             if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
                 setupPermissions();
@@ -34,10 +38,11 @@ public class SkPerm extends JavaPlugin {
             }
             if (Bukkit.getPluginManager().getPlugin("PermissionsEX") != null) {
                 try {
-                    addon.loadClasses("tk.shanebee.skperm.pex", "elements");
+                    addon.loadClasses("tk.shanebee.skperm.permPlugins", "elements");
+                    api = (API) Class.forName(PexAPI.class.getName()).newInstance();
                     sendConsoleMessage(prefix + ChatColor.GREEN + "[PEX] Dependency found, PEX syntaxes loaded");
                 } catch (Exception e) {
-                    sendConsoleMessage(prefix + ChatColor.RED + "[PEX] Loading error, try restart your server");
+                    sendConsoleMessage(prefix + ChatColor.RED + "[PEX] Loading error, try restarting your server");
                 }
             } else {
                 sendConsoleMessage(prefix + ChatColor.YELLOW + "[PEX] Dependency not found, ignoring PEX syntaxes");
@@ -60,8 +65,12 @@ public class SkPerm extends JavaPlugin {
         return perms != null;
     }
 
-    private void sendConsoleMessage(String message) {
+    private static void sendConsoleMessage(String message) {
         Bukkit.getConsoleSender().sendMessage(message);
+    }
+
+    public static API getAPI() {
+        return api;
     }
 
 }
