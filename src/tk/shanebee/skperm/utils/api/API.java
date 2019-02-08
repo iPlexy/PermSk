@@ -11,11 +11,15 @@ public interface API {
 
     void addPerm(OfflinePlayer player, String permission, World world, int seconds);
 
+    void addPerm(OfflinePlayer player, String permission, int seconds);
+
     void addPerm(String group, String permission);
 
     void addPerm(String group, String permission, World world);
 
     void addPerm(String group, String permission, World world, int seconds);
+
+    void addPerm(String group, String permission, int seconds);
 
     void removePerm(OfflinePlayer player, String permission);
 
@@ -45,12 +49,20 @@ public interface API {
 
     void addPlayerToGroup(OfflinePlayer player, String group, World world, int seconds);
 
+    void addPlayerToGroup(OfflinePlayer player, String group, int seconds);
+
     void removePlayerFromGroup(OfflinePlayer player, String group);
 
     void removePlayerFromGroup(OfflinePlayer player, String group, World world);
 
+    OfflinePlayer[] getPlayersInGroup(String group);
+
     void setGroupWeight(String group, int weight);
 
     void setGroupRank(String group, int rank);
+
+    int getGroupWeight(String group);
+
+    int getGroupRank(String group);
 
 }
