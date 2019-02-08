@@ -10,16 +10,18 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import org.bukkit.event.Event;
-import ru.tehkode.permissions.PermissionGroup;
-import ru.tehkode.permissions.bukkit.PermissionsEx;
+import tk.shanebee.skperm.SkPerm;
+import tk.shanebee.skperm.utils.api.API;
 
-@Name("PEX: Group Rank")
-@Description("Set the rank of a group")
+@Name("Permission: Group Rank")
+@Description("Set the rank of a group, also supports add, remove, reset and get. Currently only supports PEX")
 @Examples({"set rank of group \"mod\" to 100", "reset rank of group \"admin\"",
         "set {_rank} to rank of group \"owner\""})
 @RequiredPlugins({"Vault", "PermissionsEX"})
-@Since("1.1.0")
+@Since("2.0.0")
 public class ExprGroupRank extends SimpleExpression<Number> {
+
+    API api = SkPerm.getAPI();
 
     static {
         Skript.registerExpression(ExprGroupRank.class, Number.class, ExpressionType.PROPERTY,
@@ -37,7 +39,7 @@ public class ExprGroupRank extends SimpleExpression<Number> {
 
     @Override
     public Class<?>[] acceptChange(ChangeMode mode) {
-        if (mode == ChangeMode.SET || mode == ChangeMode.REMOVE || mode == ChangeMode.RESET) {
+        if (mode == ChangeMode.SET || mode == ChangeMode.REMOVE || mode == ChangeMode.RESET || mode == ChangeMode.ADD) {
             return CollectionUtils.array(Number.class);
         }
         return null;
@@ -45,21 +47,29 @@ public class ExprGroupRank extends SimpleExpression<Number> {
 
     @Override
     protected Number[] get(Event e) {
-        PermissionGroup group = PermissionsEx.getPermissionManager().getGroup(this.group.getSingle(e));
-        return CollectionUtils.array(group.getRank());
+        return CollectionUtils.array(api.getGroupRank(this.group.getSingle(e)));
     }
 
     @Override
     public void change(Event e, Object[] delta, ChangeMode mode) {
-        PermissionGroup group = PermissionsEx.getPermissionManager().getGroup(this.group.getSingle(e));
-        Number rank = (Number) delta[0];
+        String group = this.group.getSingle(e);
+        int oldRank;
+        Number rank = delta != null ? (Number) delta[0] : 0;
         switch (mode) {
             case SET:
-                group.setRank(rank.intValue());
+                api.setGroupRank(group, rank.intValue());
+                break;
+            case ADD:
+                oldRank = api.getGroupRank(group);
+                api.setGroupRank(group, (rank.intValue() + oldRank));
                 break;
             case REMOVE:
+                oldRank = api.getGroupRank(group);
+                api.setGroupRank(group, (oldRank - rank.intValue()));
+                break;
             case RESET:
-                group.getRank();
+                api.setGroupRank(group, 0);
+                break;
         }
     }
 
