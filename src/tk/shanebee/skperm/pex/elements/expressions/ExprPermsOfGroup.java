@@ -74,14 +74,16 @@ public class ExprPermsOfGroup extends SimpleExpression<String> {
                             api.addPerm(group, perm, world);
                         else
                             api.addPerm(group, perm);
+                    else if (world != null)
+                        api.addPerm(group, perm, world, sec);
                     else
-                        if (world != null)
-                            api.addPerm(group, perm, world, sec);
-                        else
-                            api.addPerm(group, perm, sec);
+                        api.addPerm(group, perm, sec);
                     break;
                 case REMOVE:
-                    api.removePerm(group, perm, world);
+                    if (world != null)
+                        api.removePerm(group, perm, world);
+                    else
+                        api.removePerm(group, perm);
                     break;
             }
         }
