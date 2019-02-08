@@ -10,33 +10,31 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
-import net.milkbowl.vault.permission.Permission;
 import org.bukkit.World;
 import org.bukkit.event.Event;
-import ru.tehkode.permissions.PermissionGroup;
-import ru.tehkode.permissions.bukkit.PermissionsEx;
 import tk.shanebee.skperm.SkPerm;
+import tk.shanebee.skperm.utils.api.API;
 
 import java.util.Arrays;
 
-@Name("PEX: Permissions of Group")
+@Name("Permission: Permissions of Group")
 @Description("Returns a list of all the group's permissions with an option to get the permissions for a specific world. " +
-        "You can also add/remove permissions to/group a group (Supports lists of permissions/strings) " +
-        "[Support for timed permissions does not seem to be working. This is an issue with PEX. May or may not work]")
+        "You can also add/remove permissions to/from a group (Supports lists of permissions/strings) " +
+        "[Support for timed permissions does not seem to be working. This is an issue with PEX. May or may not work]" +
+        " Currently only supports PEX")
 @Examples({"set {_perms::*} to all permissions of group \"mod\"",
         "set {_perms::*} to all permissions of group \"builder\" in world \"world\"",
         "send \"Perms in %world of player%: %all permissions of group \"\"admin\"\" in world of player%\"",
         "add \"essentials.fly\" to permissions of group \"builder\" in world \"world\"",
         "remove \"essentials.fly\" from permissions of group \"mod\""})
-@RequiredPlugins({"Vault", "PermissionsEX"})
-@Since("1.1.0")
+@Since("2.0.0")
 public class ExprPermsOfGroup extends SimpleExpression<String> {
 
-    private Permission manager = SkPerm.perms;
+    private API api = SkPerm.getAPI();
 
     static {
         Skript.registerExpression(ExprPermsOfGroup.class, String.class, ExpressionType.PROPERTY,
-                "perm[ission][s] of group %string% [in [world] %-world%] [for %-timespan%]",
+                "[all] perm[ission][s] of group %string% [in [world] %-world%] [for %-timespan%]",
                 "group %string%'s perm[ission][s] [in [world] %-world%] [for %-timespan%]");
     }
 
@@ -64,19 +62,26 @@ public class ExprPermsOfGroup extends SimpleExpression<String> {
     @Override
     public void change(Event e, Object[] delta, Changer.ChangeMode mode) {
         String[] perms = delta == null ? null : Arrays.copyOf(delta, delta.length, String[].class);
-        String w = world == null ? null : world.getSingle(e).getName();
+        String group = this.group.getSingle(e);
+        World world = this.world == null ? null : this.world.getSingle(e);
         int sec = time == null ? 0 : ((int) time.getSingle(e).getTicks_i() / 20);
         if (perms == null) return;
         for (String perm : perms) {
             switch (mode) {
                 case ADD:
                     if (sec == 0)
-                        manager.groupAdd(w, group.getSingle(e), perm);
+                        if (world != null)
+                            api.addPerm(group, perm, world);
+                        else
+                            api.addPerm(group, perm);
                     else
-                        PermissionsEx.getPermissionManager().getGroup(group.getSingle(e)).addTimedPermission(perm, w, sec);
+                        if (world != null)
+                            api.addPerm(group, perm, world, sec);
+                        else
+                            api.addPerm(group, perm, sec);
                     break;
                 case REMOVE:
-                    manager.groupRemove(w, group.getSingle(e), perm);
+                    api.removePerm(group, perm, world);
                     break;
             }
         }
@@ -84,9 +89,11 @@ public class ExprPermsOfGroup extends SimpleExpression<String> {
 
     @Override
     protected String[] get(Event e) {
-        String world = this.world == null ? null : this.world.getSingle(e).getName();
-        PermissionGroup group = PermissionsEx.getPermissionManager().getGroup(this.group.getSingle(e));
-        return group.getPermissions(world).toArray(new String[0]);
+        if (this.world == null) {
+            return api.getPerm(this.group.getSingle(e));
+        } else {
+            return api.getPerm(this.group.getSingle(e), this.world.getSingle(e));
+        }
     }
 
     @Override
