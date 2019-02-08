@@ -10,31 +10,29 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
-import net.milkbowl.vault.permission.Permission;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.event.Event;
-import ru.tehkode.permissions.PermissionUser;
-import ru.tehkode.permissions.bukkit.PermissionsEx;
 import tk.shanebee.skperm.SkPerm;
+import tk.shanebee.skperm.utils.api.API;
 
 import java.util.Arrays;
 
-@Name("PEX: Permissions of Player")
+@Name("Permission: Permissions of Player")
 @Description("Returns a list of all the player's permissions with an option to get the permissions for a specific world. " +
         "You can also add/remove permissions to/from a player (Supports lists of permissions/strings) " +
-        "[Support for timed permissions does not seem to be working. This is an issue with PEX. May or may not work]")
+        "[Support for timed permissions does not seem to be working in PEX. May or may not work]" +
+        " Currently only supported in PEX")
 @Examples({"set {_perms::*} to all permissions of player",
         "set {_perms::*} to all permissions of player in \"world\"",
         "send \"Perms in %world of player%: %all permissions of player in world of player%\"",
         "add \"essentials.chat\" to permissions of player",
         "add \"essentials.fly\" to permissions of player in world of player",
         "remove \"essentials.fly\" from permissions of player"})
-@RequiredPlugins({"PermissionsEX", "Vault"})
 @Since("1.1.0")
 public class ExprPermsOfPlayer extends SimpleExpression<String> {
 
-    private Permission manager = SkPerm.perms;
+    private API api = SkPerm.getAPI();
 
     static {
         Skript.registerExpression(ExprPermsOfPlayer.class, String.class, ExpressionType.PROPERTY,
@@ -66,24 +64,35 @@ public class ExprPermsOfPlayer extends SimpleExpression<String> {
     @Override
     public void change(Event e, Object[] delta, Changer.ChangeMode mode) {
         String[] perms = delta == null ? null : Arrays.copyOf(delta, delta.length, String[].class);
-        String w = world == null ? null : world.getSingle(e).getName();
+        World world = this.world == null ? null : this.world.getSingle(e);
         int sec = time == null ? 0 : ((int) time.getSingle(e).getTicks_i() / 20);
+        OfflinePlayer player = this.player.getSingle(e);
+
         switch (mode) {
             case ADD:
                 if (perms == null) return;
                 for (String perm : perms) {
                     if (sec == 0) {
-                        manager.playerAdd(w, player.getSingle(e), perm);
+                        if (world != null)
+                            api.addPerm(player, perm, world);
+                        else
+                            api.addPerm(player, perm);
                     }
                     else {
-                        PermissionsEx.getUser(player.getSingle(e).getName()).addTimedPermission(perm, w, sec);
+                        if (world != null)
+                            api.addPerm(player, perm, world, sec);
+                        else
+                            api.addPerm(player, perm, sec);
                     }
                 }
                 break;
             case REMOVE:
                 if (perms == null) return;
                 for (String perm : perms) {
-                    manager.playerRemove(w, player.getSingle(e), perm);
+                    if (world != null)
+                        api.removePerm(player, perm, world);
+                    else
+                        api.removePerm(player, perm);
                 }
                 break;
         }
@@ -91,9 +100,10 @@ public class ExprPermsOfPlayer extends SimpleExpression<String> {
 
     @Override
     protected String[] get(Event e) {
-        String world = this.world == null ? null : this.world.getSingle(e).getName();
-        PermissionUser user = PermissionsEx.getPermissionManager().getUser(player.getSingle(e).getUniqueId());
-        return user.getPermissions(world).toArray(new String[0]);
+        if (this.world != null)
+            return api.getPerm(player.getSingle(e), this.world.getSingle(e));
+        else
+            return api.getPerm(player.getSingle(e));
     }
 
     @Override
