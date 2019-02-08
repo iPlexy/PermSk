@@ -29,7 +29,7 @@ import java.util.Arrays;
         "add \"essentials.chat\" to permissions of player",
         "add \"essentials.fly\" to permissions of player in world of player",
         "remove \"essentials.fly\" from permissions of player"})
-@Since("1.1.0")
+@Since("2.0.0")
 public class ExprPermsOfPlayer extends SimpleExpression<String> {
 
     private API api = SkPerm.getAPI();
