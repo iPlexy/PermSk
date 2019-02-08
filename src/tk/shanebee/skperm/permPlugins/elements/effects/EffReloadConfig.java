@@ -1,4 +1,4 @@
-package tk.shanebee.skperm.pex.elements.effects;
+package tk.shanebee.skperm.permPlugins.elements.effects;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.*;

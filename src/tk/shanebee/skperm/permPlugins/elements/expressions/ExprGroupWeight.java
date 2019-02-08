@@ -1,4 +1,4 @@
-package tk.shanebee.skperm.pex.elements.expressions;
+package tk.shanebee.skperm.permPlugins.elements.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer.ChangeMode;
@@ -13,18 +13,18 @@ import org.bukkit.event.Event;
 import tk.shanebee.skperm.SkPerm;
 import tk.shanebee.skperm.utils.api.API;
 
-@Name("Permission: Group Rank")
-@Description("Set the rank of a group, also supports add, remove, reset and get. Currently only supports PEX")
-@Examples({"set rank of group \"mod\" to 100", "reset rank of group \"admin\"",
-        "set {_rank} to rank of group \"owner\""})
+@Name("Permission: Group Weight")
+@Description("Set the weight of a group, also supports add, remove, reset and get. Currently only supports PEX")
+@Examples({"set weight of group \"owner\" to 1", "set weight of group \"admin\" to 100",
+        "reset weight of group \"default\"", "set {_weight} to weight of group \"admin\""})
 @Since("2.0.0")
-public class ExprGroupRank extends SimpleExpression<Number> {
+public class ExprGroupWeight extends SimpleExpression<Number> {
 
     private API api = SkPerm.getAPI();
 
     static {
-        Skript.registerExpression(ExprGroupRank.class, Number.class, ExpressionType.PROPERTY,
-                "[the] rank of group %string%", "group %string%'s rank");
+        Skript.registerExpression(ExprGroupWeight.class, Number.class, ExpressionType.PROPERTY,
+                "weight of group %string%", "group %string%'s weight");
     }
 
     private Expression<String> group;
@@ -46,29 +46,28 @@ public class ExprGroupRank extends SimpleExpression<Number> {
 
     @Override
     protected Number[] get(Event e) {
-        return CollectionUtils.array(api.getGroupRank(this.group.getSingle(e)));
+        return CollectionUtils.array(api.getGroupWeight(this.group.getSingle(e)));
     }
 
     @Override
     public void change(Event e, Object[] delta, ChangeMode mode) {
         String group = this.group.getSingle(e);
-        int oldRank;
-        Number rank = delta != null ? (Number) delta[0] : 0;
+        Number weight = delta != null ? (Number) delta[0] : 0;
+        int oldWeight;
         switch (mode) {
             case SET:
-                api.setGroupRank(group, rank.intValue());
+                api.setGroupWeight(group, weight.intValue());
                 break;
             case ADD:
-                oldRank = api.getGroupRank(group);
-                api.setGroupRank(group, (rank.intValue() + oldRank));
+                oldWeight = api.getGroupWeight(group);
+                api.setGroupWeight(group, (oldWeight + weight.intValue()));
                 break;
             case REMOVE:
-                oldRank = api.getGroupRank(group);
-                api.setGroupRank(group, (oldRank - rank.intValue()));
+                oldWeight = api.getGroupWeight(group);
+                api.setGroupWeight(group, (oldWeight - weight.intValue()));
                 break;
             case RESET:
-                api.setGroupRank(group, 0);
-                break;
+                api.setGroupWeight(group, 0);
         }
     }
 
@@ -84,7 +83,6 @@ public class ExprGroupRank extends SimpleExpression<Number> {
 
     @Override
     public String toString(Event e, boolean d) {
-        return "rank of group " + group.toString(e, d);
+        return "weight of group " + group.toString(e, d);
     }
-
 }
