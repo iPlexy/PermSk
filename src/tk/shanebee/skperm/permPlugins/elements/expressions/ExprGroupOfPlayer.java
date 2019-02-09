@@ -22,15 +22,16 @@ import tk.shanebee.skperm.utils.api.API;
 import javax.annotation.Nullable;
 
 @Name("Permission: Group Members")
-@Description("Get all the users in a group. Also supports adding and removing players to/from groups. Currently only PEX is supported")
+@Description("Get all the users in a group. Also supports adding and removing players to/from groups. " +
+        "[Requires a permission plugin, Currently only supports PEX]")
 @Examples({"add player to group \"owner\"", "remove player from group \"moderator\""})
 @Since("2.0.0")
-public class ExprPlayerGroup extends SimpleExpression<OfflinePlayer> {
+public class ExprGroupOfPlayer extends SimpleExpression<OfflinePlayer> {
 
     private API api = SkPerm.getAPI();
 
     static {
-        Skript.registerExpression(ExprPlayerGroup.class, OfflinePlayer.class, ExpressionType.PROPERTY,
+        Skript.registerExpression(ExprGroupOfPlayer.class, OfflinePlayer.class, ExpressionType.PROPERTY,
                 "[members of] group %string% [in [world] %-world%] [for %-timespan%])");
     }
 

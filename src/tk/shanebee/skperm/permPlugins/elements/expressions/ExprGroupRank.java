@@ -14,7 +14,8 @@ import tk.shanebee.skperm.SkPerm;
 import tk.shanebee.skperm.utils.api.API;
 
 @Name("Permission: Group Rank")
-@Description("Set the rank of a group, also supports add, remove, reset and get. Currently only supports PEX")
+@Description("Set the rank of a group, also supports add, remove, reset and get. " +
+        "[Requires a permission plugin, Currently only supports PEX]")
 @Examples({"set rank of group \"mod\" to 100", "reset rank of group \"admin\"",
         "set {_rank} to rank of group \"owner\""})
 @Since("2.0.0")

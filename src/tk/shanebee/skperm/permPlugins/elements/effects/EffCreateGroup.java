@@ -11,7 +11,8 @@ import tk.shanebee.skperm.SkPerm;
 import tk.shanebee.skperm.utils.api.API;
 
 @Name("Permission: Create/Delete Group")
-@Description("Create a new permission group or remove one. Optional parents can be added. Currently supports PEX")
+@Description("Create a new permission group or remove one. Optional parents can be added. " +
+        "[Requires a permission plugin, Currently only supports PEX]")
 @Examples({"create new group \"default\"",
         "create new group \"moderator\" with parent \"default\"", "create new group \"admin\" with parents \"moderator\" and \"default\"",
         "remove group \"moderator\""})
