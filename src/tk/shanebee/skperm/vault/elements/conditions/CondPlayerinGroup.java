@@ -12,7 +12,7 @@ import org.bukkit.World;
 import org.bukkit.event.Event;
 import tk.shanebee.skperm.SkPerm;
 
-@Name("Permission: Player in Group")
+@Name("Vault Universal: Player in Group")
 @Description("Check if a player belongs to a group. Worlds are only supported if your permission plugin supports them.")
 @Examples({"if player is in group \"moderator\":", "if player is a member of group \"admin\":",
         "if player is in group \"default\" in world \"world_nether\":"})

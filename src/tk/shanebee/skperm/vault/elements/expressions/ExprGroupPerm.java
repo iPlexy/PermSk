@@ -14,7 +14,7 @@ import org.bukkit.World;
 import org.bukkit.event.Event;
 import tk.shanebee.skperm.SkPerm;
 
-@Name("Permission: Group's Permissions")
+@Name("Vault Universal: Group's Permissions")
 @Description("Add or remove permissions to/from a group. Worlds are only supported if your permission plugin supports them.")
 @Examples({"add \"essentials.chat\" to permissions of group \"members\"",
         "add \"essentials.home\" to permissions of group \"knight\" in world \"world\"",

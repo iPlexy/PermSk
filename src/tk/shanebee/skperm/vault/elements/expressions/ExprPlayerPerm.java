@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
-@Name("Permission: Player's Permissions")
+@Name("Vault Universal: Player's Permissions")
 @Description("Add or remove permissions of a player. Worlds are only supported if your permission plugin supports them." +
         "Getting permissions for offline players is not supported.")
 @Examples({"add \"essentials.home\" to permission of player", "add \"essentials.teleport\" to permission of player in world \"world\"",
