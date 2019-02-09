@@ -2,6 +2,7 @@ package tk.shanebee.skperm.utils.api;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public interface API {
 
@@ -64,5 +65,21 @@ public interface API {
     int getGroupWeight(String group);
 
     int getGroupRank(String group);
+
+    void setGroupPrefix(String group, String prefix);
+
+    void setGroupPrefix(String group, String prefix, World world);
+
+    String getGroupPrefix(String group);
+
+    String getGroupPrefix(String group, World world);
+
+    void setGroupSuffix(String group, String suffix);
+
+    void setGroupSuffix(String group, String suffix, World world);
+
+    String getGroupSuffix(String group);
+
+    String getGroupSuffix(String group, World world);
 
 }
