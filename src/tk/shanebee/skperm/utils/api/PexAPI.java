@@ -150,4 +150,36 @@ public class PexAPI implements API {
         return PermissionsEx.getPermissionManager().getGroup(group).getRank();
     }
 
+    public void setGroupPrefix(String group, String prefix) {
+        PermissionsEx.getPermissionManager().getGroup(group).setPrefix(prefix, null);
+    }
+
+    public void setGroupPrefix(String group, String prefix, World world) {
+        PermissionsEx.getPermissionManager().getGroup(group).setPrefix(prefix, world.getName());
+    }
+
+    public String getGroupPrefix(String group) {
+        return PermissionsEx.getPermissionManager().getGroup(group).getPrefix();
+    }
+
+    public String getGroupPrefix(String group, World world) {
+        return PermissionsEx.getPermissionManager().getGroup(group).getPrefix(world.getName());
+    }
+
+    public void setGroupSuffix(String group, String suffix) {
+        PermissionsEx.getPermissionManager().getGroup(group).setSuffix(suffix, null);
+    }
+
+    public void setGroupSuffix(String group, String suffix, World world) {
+        PermissionsEx.getPermissionManager().getGroup(group).setSuffix(suffix, world.getName());
+    }
+
+    public String getGroupSuffix(String group) {
+        return PermissionsEx.getPermissionManager().getGroup(group).getSuffix();
+    }
+
+    public String getGroupSuffix(String group, World world) {
+        return PermissionsEx.getPermissionManager().getGroup(group).getSuffix(world.getName());
+    }
+
 }
