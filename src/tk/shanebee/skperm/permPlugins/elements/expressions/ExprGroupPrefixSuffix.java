@@ -2,6 +2,10 @@ package tk.shanebee.skperm.permPlugins.elements.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer.ChangeMode;
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Name;
+import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -13,6 +17,14 @@ import org.bukkit.event.Event;
 import tk.shanebee.skperm.SkPerm;
 import tk.shanebee.skperm.utils.api.API;
 
+@Name("Permission: Group Prefix/Suffix")
+@Description("Get/Set prefix/suffix of groups. IF you have issues with it clashing with Skript's expression, " +
+        "make sure to add \"perm\" or \"permission\" to the front of your code" +
+        "[Requires a permission plugin, Currently supports PEX and LuckPerms]")
+@Examples({"set {_pre} to perm prefix of group \"owner\"", "set perm prefix of group \"owner\" to \"[OWNER]\"",
+        "set perm prefix of group \"member\" in world \"world\" to \"[MEMBER-WORLD]\"",
+        "set perm suffix of group \"player\" in world \"world_nether\" to \"[HELL]\""})
+@Since("2.1.0")
 public class ExprGroupPrefixSuffix extends SimpleExpression<String> {
 
     private API api = SkPerm.getAPI();
