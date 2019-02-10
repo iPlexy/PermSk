@@ -6,7 +6,6 @@ import me.lucko.luckperms.api.LuckPermsApi;
 import me.lucko.luckperms.api.Node;
 import me.lucko.luckperms.api.User;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 
@@ -25,7 +24,7 @@ public class LuckAPI implements API {
             api.getUserManager().saveUser(user);
             Bukkit.getConsoleSender().sendMessage("Player Saved");
         }
-    } // TODO COMPLETED
+    }
 
     public void addPerm(OfflinePlayer player, String permission, World world) {
         Node node = api.getNodeFactory().newBuilder(permission).setWorld(world.getName()).build();
@@ -34,7 +33,7 @@ public class LuckAPI implements API {
             user.setPermission(node);
             api.getUserManager().saveUser(user);
         }
-    } // TODO COMPLETED
+    }
 
     public void addPerm(OfflinePlayer player, String permission, World world, int seconds) {
         Node node = api.getNodeFactory().newBuilder(permission).setWorld(world.getName()).setExpiry(seconds, TimeUnit.SECONDS).build();
@@ -43,9 +42,8 @@ public class LuckAPI implements API {
             user.setPermission(node);
             api.getUserManager().saveUser(user);
         }
-    } // TODO COMPLETED
-
-
+    }
+    
     public void addPerm(OfflinePlayer player, String permission, int seconds) {
         Node node = api.getNodeFactory().newBuilder(permission).setExpiry(seconds, TimeUnit.SECONDS).build();
         User user = api.getUserManager().loadUser(player.getUniqueId()).join();
@@ -53,7 +51,7 @@ public class LuckAPI implements API {
             user.setPermission(node);
             api.getUserManager().saveUser(user);
         }
-    } // TODO COMPLETED
+    }
 
     public void addPerm(String group, String permission) {
         Node node = api.getNodeFactory().newBuilder(permission).build();
@@ -62,7 +60,7 @@ public class LuckAPI implements API {
             groupT.setPermission(node);
             api.getGroupManager().saveGroup(groupT);
         }
-    } // TODO COMPLETED
+    }
 
     public void addPerm(String group, String permission, World world) {
         Node node = api.getNodeFactory().newBuilder(permission).setWorld(world.getName()).build();
@@ -71,7 +69,7 @@ public class LuckAPI implements API {
             groupT.setPermission(node);
             api.getGroupManager().saveGroup(groupT);
         }
-    } // TODO COMPLETED
+    }
 
     public void addPerm(String group, String permission, World world, int seconds) {
         Node node = api.getNodeFactory().newBuilder(permission).setWorld(world.getName()).setExpiry(seconds, TimeUnit.SECONDS).build();
@@ -80,7 +78,7 @@ public class LuckAPI implements API {
             groupT.setPermission(node);
             api.getGroupManager().saveGroup(groupT);
         }
-    } // TODO COMPLETED
+    }
 
     public void addPerm(String group, String permission, int seconds) {
         Node node = api.getNodeFactory().newBuilder(permission).setExpiry(seconds, TimeUnit.SECONDS).build();
@@ -89,7 +87,7 @@ public class LuckAPI implements API {
             groupT.setPermission(node);
             api.getGroupManager().saveGroup(groupT);
         }
-    } // TODO COMPLETED
+    }
 
     public void removePerm(OfflinePlayer player, String permission) {
         Node node = api.getNodeFactory().newBuilder(permission).build();
@@ -102,7 +100,7 @@ public class LuckAPI implements API {
             }
             api.getUserManager().saveUser(user);
         }
-    } // TODO COMPLETED
+    }
 
     public void removePerm(OfflinePlayer player, String permission, World world) {
         Node node = api.getNodeFactory().newBuilder(permission).setWorld(world.getName()).build();
@@ -111,7 +109,7 @@ public class LuckAPI implements API {
             user.unsetPermission(node);
             api.getUserManager().saveUser(user);
         }
-    } // TODO COMPLETED
+    }
 
     public void removePerm(String group, String permission) {
         Node node = api.getNodeFactory().newBuilder(permission).build();
@@ -124,7 +122,7 @@ public class LuckAPI implements API {
             }
             api.getGroupManager().saveGroup(groupT);
         }
-    } // TODO COMPLETED
+    }
 
     public void removePerm(String group, String permission, World world) {
         Node node = api.getNodeFactory().newBuilder(permission).setWorld(world.getName()).build();
@@ -133,9 +131,9 @@ public class LuckAPI implements API {
             groupT.unsetPermission(node);
             api.getGroupManager().saveGroup(groupT);
         }
-    } // TODO COMPLETED
+    }
 
-    public String[] getPerm(OfflinePlayer player) { // TODO   COMPLETED
+    public String[] getPerm(OfflinePlayer player) {
         User user = api.getUserManager().loadUser(player.getUniqueId()).join();
         ArrayList<String> perms = new ArrayList<>();
         for (Node perm : user.getPermissions()) {
@@ -145,7 +143,7 @@ public class LuckAPI implements API {
         return perms.toArray(new String[0]);
     }
 
-    public String[] getPerm(OfflinePlayer player, World world) { // TODO   COMPLETED
+    public String[] getPerm(OfflinePlayer player, World world) {
         User user = api.getUserManager().loadUser(player.getUniqueId()).join();
         ArrayList<String> perms = new ArrayList<>();
         for (Node perm : user.getPermissions()) {
@@ -163,29 +161,33 @@ public class LuckAPI implements API {
         if (groupT == null) return null;
         ArrayList<String> perms = new ArrayList<>();
         for (Node perm : groupT.getPermissions()) {
-            if (!perm.getPermission().startsWith("prefix.") && !perm.getPermission().startsWith("weight.")) {
+            if (!perm.getPermission().startsWith("prefix.") &&
+                    !perm.getPermission().startsWith("weight.") &&
+                    !perm.getPermission().startsWith("suffix.")) {
                 perms.add(perm.getPermission());
             }
         }
         return perms.toArray(new String[0]);
-    } // TODO DOUBLE CHECK
+    }
 
     public String[] getPerm(String group, World world) {
         Group groupT = api.getGroup(group);
         if (groupT == null) return null;
         ArrayList<String> perms = new ArrayList<>();
         for (Node perm : groupT.getPermissions()) {
-            if (!perm.getPermission().startsWith("prefix.") && !perm.getPermission().startsWith("weight.")) {
+            if (!perm.getPermission().startsWith("prefix.") &&
+                    !perm.getPermission().startsWith("weight.") &&
+                    !perm.getPermission().startsWith("suffix.")) {
                 if (perm.getWorld().toString().contains("[" + world.getName() + "]"))
                 perms.add(perm.getPermission());
             }
         }
         return perms.toArray(new String[0]);
-    } // TODO DOUBLE CHECK
+    }
 
     public void createGroup(String group) {
         api.getGroupManager().createAndLoadGroup(group);
-    } // TODO   COMPLETED
+    }
 
     public void createGroup(String group, String[] parents) {
         api.getGroupManager().createAndLoadGroup(group);
@@ -197,7 +199,7 @@ public class LuckAPI implements API {
             groupT.setPermission(node);
             api.getGroupManager().saveGroup(groupT);
         }
-    } // TODO   COMPLETED
+    }
 
     public void removeGroup(String group) {
         Group groupT = api.getGroup(group);
@@ -211,7 +213,7 @@ public class LuckAPI implements API {
         Node node = api.getNodeFactory().makeGroupNode(group).build();
         user.setPermission(node);
         api.getUserManager().saveUser(user);
-    } // TODO COMPLETED
+    }
 
     public void addPlayerToGroup(OfflinePlayer player, String group, World world) {
         if (!api.getGroupManager().isLoaded(group)) return;
@@ -219,7 +221,7 @@ public class LuckAPI implements API {
         Node node = api.getNodeFactory().makeGroupNode(group).setWorld(world.getName()).build();
         user.setPermission(node);
         api.getUserManager().saveUser(user);
-    } // TODO COMPLETED
+    }
 
     public void addPlayerToGroup(OfflinePlayer player, String group, World world, int seconds) {
         if (!api.getGroupManager().isLoaded(group)) return;
@@ -227,7 +229,7 @@ public class LuckAPI implements API {
         Node node = api.getNodeFactory().makeGroupNode(group).setWorld(world.getName()).setExpiry(seconds, TimeUnit.SECONDS).build();
         user.setPermission(node);
         api.getUserManager().saveUser(user);
-    } // TODO COMPLETED
+    }
 
     public void addPlayerToGroup(OfflinePlayer player, String group, int seconds) {
         if (!api.getGroupManager().isLoaded(group)) return;
@@ -235,7 +237,7 @@ public class LuckAPI implements API {
         Node node = api.getNodeFactory().makeGroupNode(group).setExpiry(seconds, TimeUnit.SECONDS).build();
         user.setPermission(node);
         api.getUserManager().saveUser(user);
-    } // TODO COMPLETED
+    }
 
     public void removePlayerFromGroup(OfflinePlayer player, String group) {
         if (!api.getGroupManager().isLoaded(group)) return;
@@ -247,7 +249,7 @@ public class LuckAPI implements API {
             user.unsetPermission(node);
         }
         api.getUserManager().saveUser(user);
-    } // TODO COMPLETED
+    }
 
     public void removePlayerFromGroup(OfflinePlayer player, String group, World world) {
         if (!api.getGroupManager().isLoaded(group)) return;
@@ -255,8 +257,7 @@ public class LuckAPI implements API {
         Node node = api.getNodeFactory().makeGroupNode(group).setWorld(world.getName()).build();
         user.unsetPermission(node);
         api.getUserManager().saveUser(user);
-    } // TODO COMPLETED
-
+    }
 
     public OfflinePlayer[] getPlayersInGroup(String group) {
         ArrayList<OfflinePlayer> list = new ArrayList<>();
@@ -282,11 +283,10 @@ public class LuckAPI implements API {
         Node newWeight = api.getNodeFactory().newBuilder("weight." + weight).build();
         groupT.setPermission(newWeight);
         api.getGroupManager().saveGroup(groupT);
-    } // TODO COMPLETED
+    }
 
     public void setGroupRank(String group, int rank) {
-        // TODO not supported by LuckPerms?
-    }
+    } // TODO not supported by LuckPerms?
 
     public int getGroupWeight(String group) {
         Group groupT = api.getGroup(group);
@@ -311,7 +311,7 @@ public class LuckAPI implements API {
         Node node = api.getNodeFactory().makePrefixNode(0, prefix).build();
         groupT.setPermission(node);
         api.getGroupManager().saveGroup(groupT);
-    } // TODO COMPLETED
+    }
 
     public void setGroupPrefix(String group, String prefix, World world) {
         Group groupT = api.getGroup(group);
@@ -324,7 +324,7 @@ public class LuckAPI implements API {
         }
         groupT.setPermission(node);
         api.getGroupManager().saveGroup(groupT);
-    } // TODO COMPLETED
+    }
 
     public String getGroupPrefix(String group) {
         Group groupT = api.getGroupManager().getGroup(group);
@@ -335,7 +335,7 @@ public class LuckAPI implements API {
             prefix = node.getPrefix().getValue();
         }
         return prefix;
-    } // TODO COMPLETED
+    }
 
     public String getGroupPrefix(String group, World world) {
         Group groupT = api.getGroupManager().getGroup(group);
@@ -347,7 +347,7 @@ public class LuckAPI implements API {
             prefix = node.getPrefix().getValue();
         }
         return prefix;
-    } // TODO COMPLETED
+    }
 
     public void setGroupSuffix(String group, String suffix) {
         Group groupT = api.getGroup(group);
@@ -359,7 +359,7 @@ public class LuckAPI implements API {
         Node node = api.getNodeFactory().makeSuffixNode(0, suffix).build();
         groupT.setPermission(node);
         api.getGroupManager().saveGroup(groupT);
-    } // TODO COMPLETED
+    }
 
     public void setGroupSuffix(String group, String suffix, World world) {
         Group groupT = api.getGroup(group);
@@ -372,7 +372,7 @@ public class LuckAPI implements API {
         }
         groupT.setPermission(node);
         api.getGroupManager().saveGroup(groupT);
-    } // TODO COMPLETED
+    }
 
     public String getGroupSuffix(String group) {
         Group groupT = api.getGroupManager().getGroup(group);
@@ -383,7 +383,7 @@ public class LuckAPI implements API {
             suffix = node.getSuffix().getValue();
         }
         return suffix;
-    } // TODO COMPLETED
+    }
 
     public String getGroupSuffix(String group, World world) {
         Group groupT = api.getGroupManager().getGroup(group);
@@ -395,10 +395,6 @@ public class LuckAPI implements API {
             suffix = node.getSuffix().getValue();
         }
         return suffix;
-    } // TODO COMPLETED
-
-    public void sendDebug(String message) {
-        Bukkit.getConsoleSender().sendMessage(ChatColor.RED + message);
     }
 
 }
