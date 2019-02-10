@@ -26,12 +26,12 @@ import javax.annotation.Nullable;
         "[Requires a permission plugin, Currently only supports PEX]")
 @Examples({"add player to group \"owner\"", "remove player from group \"moderator\""})
 @Since("2.0.0")
-public class ExprGroupOfPlayer extends SimpleExpression<OfflinePlayer> {
+public class ExprGroupMembers extends SimpleExpression<OfflinePlayer> {
 
     private API api = SkPerm.getAPI();
 
     static {
-        Skript.registerExpression(ExprGroupOfPlayer.class, OfflinePlayer.class, ExpressionType.PROPERTY,
+        Skript.registerExpression(ExprGroupMembers.class, OfflinePlayer.class, ExpressionType.PROPERTY,
                 "[members of] group %string% [in [world] %-world%] [for %-timespan%])");
     }
 
