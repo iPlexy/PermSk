@@ -2,7 +2,6 @@ package tk.shanebee.skperm.utils.api;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
-import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public interface API {
 
