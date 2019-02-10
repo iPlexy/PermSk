@@ -304,56 +304,98 @@ public class LuckAPI implements API {
     public void setGroupPrefix(String group, String prefix) {
         Group groupT = api.getGroup(group);
         if (groupT == null) return;
+        for (Node nodeD : api.getGroup(group).getPermissions()) {
+            if (nodeD.getPermission().startsWith("prefix."))
+                groupT.unsetPermission(nodeD);
+        }
         Node node = api.getNodeFactory().makePrefixNode(0, prefix).build();
         groupT.setPermission(node);
         api.getGroupManager().saveGroup(groupT);
-    }
+    } // TODO COMPLETED
 
     public void setGroupPrefix(String group, String prefix, World world) {
         Group groupT = api.getGroup(group);
         Node node = api.getNodeFactory().makePrefixNode(0, prefix).setWorld(world.getName()).build();
         if (groupT == null) return;
+        for (Node nodeD : api.getGroup(group).getPermissions()) {
+            if (!nodeD.getPermission().startsWith("prefix.")) continue;
+            if (!nodeD.getWorld().toString().startsWith("Optional[" + world.getName() + "]")) continue;
+            groupT.unsetPermission(nodeD);
+        }
         groupT.setPermission(node);
         api.getGroupManager().saveGroup(groupT);
-    }
+    } // TODO COMPLETED
 
     public String getGroupPrefix(String group) {
         Group groupT = api.getGroupManager().getGroup(group);
         String prefix = null;
         if (groupT == null) return null;
         for (Node node : groupT.getPermissions()) {
+            if (!node.getPermission().startsWith("prefix.")) continue;
             prefix = node.getPrefix().getValue();
         }
         return prefix;
-    }
+    } // TODO COMPLETED
 
     public String getGroupPrefix(String group, World world) {
-        return null; //TODO figure this out
-    }
+        Group groupT = api.getGroupManager().getGroup(group);
+        String prefix = null;
+        if (groupT == null) return null;
+        for (Node node : groupT.getPermissions()) {
+            if (!node.getPermission().startsWith("prefix.")) continue;
+            if (!node.getWorld().toString().startsWith("Optional[" + world.getName() + "]")) continue;
+            prefix = node.getPrefix().getValue();
+        }
+        return prefix;
+    } // TODO COMPLETED
 
     public void setGroupSuffix(String group, String suffix) {
         Group groupT = api.getGroup(group);
-        Node node = api.getNodeFactory().makeSuffixNode(0 , suffix).build();
         if (groupT == null) return;
+        for (Node nodeD : api.getGroup(group).getPermissions()) {
+            if (nodeD.getPermission().startsWith("suffix."))
+                groupT.unsetPermission(nodeD);
+        }
+        Node node = api.getNodeFactory().makeSuffixNode(0, suffix).build();
         groupT.setPermission(node);
         api.getGroupManager().saveGroup(groupT);
-    }
+    } // TODO COMPLETED
 
     public void setGroupSuffix(String group, String suffix, World world) {
         Group groupT = api.getGroup(group);
         Node node = api.getNodeFactory().makeSuffixNode(0, suffix).setWorld(world.getName()).build();
         if (groupT == null) return;
+        for (Node nodeD : api.getGroup(group).getPermissions()) {
+            if (!nodeD.getPermission().startsWith("suffix.")) continue;
+            if (!nodeD.getWorld().toString().startsWith("Optional[" + world.getName() + "]")) continue;
+            groupT.unsetPermission(nodeD);
+        }
         groupT.setPermission(node);
         api.getGroupManager().saveGroup(groupT);
-    }
+    } // TODO COMPLETED
 
     public String getGroupSuffix(String group) {
-        return null; //TODO figure this out
-    }
+        Group groupT = api.getGroupManager().getGroup(group);
+        String suffix = null;
+        if (groupT == null) return null;
+        for (Node node : groupT.getPermissions()) {
+            if (!node.getPermission().startsWith("suffix.")) continue;
+            suffix = node.getSuffix().getValue();
+        }
+        return suffix;
+    } // TODO COMPLETED
 
     public String getGroupSuffix(String group, World world) {
-        return null; //TODO figure this out
-    }
+        Group groupT = api.getGroupManager().getGroup(group);
+        String suffix = null;
+        if (groupT == null) return null;
+        for (Node node : groupT.getPermissions()) {
+            if (!node.getPermission().startsWith("suffix.")) continue;
+            if (!node.getWorld().toString().startsWith("Optional[" + world.getName() + "]")) continue;
+            suffix = node.getSuffix().getValue();
+        }
+        return suffix;
+    } // TODO COMPLETED
 
     public void sendDebug(String message) {
         Bukkit.getConsoleSender().sendMessage(ChatColor.RED + message);
