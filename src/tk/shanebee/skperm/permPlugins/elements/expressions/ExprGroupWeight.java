@@ -15,7 +15,7 @@ import tk.shanebee.skperm.utils.api.API;
 
 @Name("Permission: Group Weight")
 @Description("Set the weight of a group, also supports add, remove, reset and get. " +
-        "[Requires a permission plugin, Currently only supports PEX]")
+        "[Requires a permission plugin, Currently supports PEX and LuckPerms]")
 @Examples({"set weight of group \"owner\" to 1", "set weight of group \"admin\" to 100",
         "reset weight of group \"default\"", "set {_weight} to weight of group \"admin\""})
 @Since("2.0.0")

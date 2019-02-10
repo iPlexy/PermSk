@@ -22,7 +22,7 @@ import java.util.Arrays;
 @Description("Returns a list of all the player's permissions with an option to get the permissions for a specific world. " +
         "You can also add/remove permissions to/from a player (Supports lists of permissions/strings) " +
         "[Support for timed permissions does not seem to be working in PEX. May or may not work]" +
-        " [Requires a permission plugin, Currently only supports PEX]")
+        " [Requires a permission plugin, Currently supports PEX and LuckPerms]")
 @Examples({"set {_perms::*} to all permissions of player",
         "set {_perms::*} to all permissions of player in \"world\"",
         "send \"Perms in %world of player%: %all permissions of player in world of player%\"",

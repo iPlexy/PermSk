@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 
 @Name("Permission: Group Members")
 @Description("Get all the users in a group. Also supports adding and removing players to/from groups. " +
-        "[Requires a permission plugin, Currently only supports PEX]")
+        "[Requires a permission plugin, Currently supports PEX and LuckPerms]")
 @Examples({"add player to group \"owner\"", "remove player from group \"moderator\""})
 @Since("2.0.0")
 public class ExprGroupMembers extends SimpleExpression<OfflinePlayer> {
