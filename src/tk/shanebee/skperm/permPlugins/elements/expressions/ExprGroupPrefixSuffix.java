@@ -18,9 +18,9 @@ public class ExprGroupPrefixSuffix extends SimpleExpression<String> {
     private API api = SkPerm.getAPI();
 
     static {
-        Skript.registerExpression(ExprGroupPrefixSuffix.class, String.class, ExpressionType.PROPERTY, "" +
-                "[the] (0¦prefix|1¦suffix) of group %string% [in [world] %-world%]," +
-                " group %string%'s (0¦prefix|1¦suffix) [in [world] %-world%]");
+        Skript.registerExpression(ExprGroupPrefixSuffix.class, String.class, ExpressionType.PROPERTY,
+                "[the] [perm[ission]] (0¦prefix|1¦suffix) of group %string% [in [world] %-world%]",
+                "group %string%'s [the] [perm[ission]] (0¦prefix|1¦suffix) [in [world] %-world%]");
     }
 
     private Expression<String> group;
