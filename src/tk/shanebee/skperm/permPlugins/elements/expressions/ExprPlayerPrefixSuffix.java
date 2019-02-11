@@ -62,7 +62,7 @@ public class ExprPlayerPrefixSuffix  extends SimpleExpression<String> {
                 return CollectionUtils.array(api.getPlayerPrefix(player.getSingle(e)));
             else
                 return CollectionUtils.array(api.getPlayerPrefix(player.getSingle(e), world.getSingle(e)));
-        } else { // TODO MAKE SUFFIX
+        } else {
             if (world == null)
                 return CollectionUtils.array(api.getPlayerSuffix(player.getSingle(e)));
             else
