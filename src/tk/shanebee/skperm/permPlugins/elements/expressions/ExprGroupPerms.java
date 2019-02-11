@@ -28,12 +28,12 @@ import java.util.Arrays;
         "add \"essentials.fly\" to permissions of group \"builder\" in world \"world\"",
         "remove \"essentials.fly\" from permissions of group \"mod\""})
 @Since("2.0.0")
-public class ExprPermsOfGroup extends SimpleExpression<String> {
+public class ExprGroupPerms extends SimpleExpression<String> {
 
     private API api = SkPerm.getAPI();
 
     static {
-        Skript.registerExpression(ExprPermsOfGroup.class, String.class, ExpressionType.PROPERTY,
+        Skript.registerExpression(ExprGroupPerms.class, String.class, ExpressionType.PROPERTY,
                 "[all] perm[ission][s] of group %string% [in [world] %-world%] [for %-timespan%]",
                 "group %string%'s perm[ission][s] [in [world] %-world%] [for %-timespan%]");
     }

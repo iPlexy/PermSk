@@ -30,12 +30,12 @@ import java.util.Arrays;
         "add \"essentials.fly\" to permissions of player in world of player",
         "remove \"essentials.fly\" from permissions of player"})
 @Since("2.0.0")
-public class ExprPermsOfPlayer extends SimpleExpression<String> {
+public class ExprPlayerPerms extends SimpleExpression<String> {
 
     private API api = SkPerm.getAPI();
 
     static {
-        Skript.registerExpression(ExprPermsOfPlayer.class, String.class, ExpressionType.PROPERTY,
+        Skript.registerExpression(ExprPlayerPerms.class, String.class, ExpressionType.PROPERTY,
                 "perm[ission][s] of %offlineplayer% [in [world] %-world%] [for %-timespan%]",
                 "%offlineplayer%'s perm[ission][s] [in [world] %-world%] [for %-timespan%]");
     }
