@@ -21,7 +21,7 @@ import java.util.Arrays;
 @Description("Returns a list of all the group's permissions with an option to get the permissions for a specific world. " +
         "You can also add/remove permissions to/from a group (Supports lists of permissions/strings) " +
         "[Support for timed permissions does not seem to be working. This is an issue with PEX. May or may not work]" +
-        " [Requires a permission plugin, Currently supports PEX and LuckPerms]")
+        " [Requires a permission plugin, Currently supports PEX, LuckPerms and UltraPermissions]")
 @Examples({"set {_perms::*} to all permissions of group \"mod\"",
         "set {_perms::*} to all permissions of group \"builder\" in world \"world\"",
         "send \"Perms in %world of player%: %all permissions of group \"\"admin\"\" in world of player%\"",

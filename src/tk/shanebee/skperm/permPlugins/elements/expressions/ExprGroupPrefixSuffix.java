@@ -20,7 +20,7 @@ import tk.shanebee.skperm.utils.api.API;
 @Name("Permission: Group Prefix/Suffix")
 @Description("Get/Set prefix/suffix of groups. IF you have issues with it clashing with Skript's expression, " +
         "make sure to add \"perm\" or \"permission\" to the front of your code" +
-        "[Requires a permission plugin, Currently supports PEX and LuckPerms]")
+        "[Requires a permission plugin, Currently supports PEX, LuckPerms and UltraPermissions]")
 @Examples({"set {_pre} to perm prefix of group \"owner\"", "set perm prefix of group \"owner\" to \"[OWNER]\"",
         "set perm prefix of group \"member\" in world \"world\" to \"[MEMBER-WORLD]\"",
         "set perm suffix of group \"player\" in world \"world_nether\" to \"[HELL]\""})
