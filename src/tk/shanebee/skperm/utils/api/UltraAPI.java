@@ -6,7 +6,6 @@ import me.TechsCode.UltraPermissions.storage.objects.Group;
 import me.TechsCode.UltraPermissions.storage.objects.Permission;
 import me.TechsCode.UltraPermissions.storage.objects.User;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 
@@ -29,7 +28,7 @@ public class UltraAPI implements API {
 
     public void addPerm(OfflinePlayer player, String permission, World world) {
         User user = api.getUsers().uuid(player.getUniqueId());
-        if (user.getPermissions().worlds(true, world.getName()).has(permission)) {
+        if (user.getPermissions().worlds(true,world.getName()).has(permission)) {
             return;
         }
         user.newPermission(permission).setWorld(world.getName()).create();
@@ -225,7 +224,7 @@ public class UltraAPI implements API {
     }
 
     public void setGroupRank(String group, int rank) {
-        // TODO NOT SUPPORTED
+        // NOT SUPPORTED
     }
 
     public int getGroupWeight(String group) {
@@ -235,26 +234,51 @@ public class UltraAPI implements API {
 
     public int getGroupRank(String group) {
         return 0;
-        // TODO NOT SUPPORTED
+        // NOT SUPPORTED
     }
 
-    public void setGroupPrefix(String group, String prefix) {}
-
-    public void setGroupPrefix(String group, String prefix, World world) {}
-
-    public String getGroupPrefix(String group) {return null;}
-
-    public String getGroupPrefix(String group, World world) {return null;}
-
-    public void setGroupSuffix(String group, String suffix) {}
-
-    public void setGroupSuffix(String group, String suffix, World world) {}
-
-    public String getGroupSuffix(String group) {return null;}
-
-    public String getGroupSuffix(String group, World world) {return null;}
-
-    private void sendDebug(String msg) {
-        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+    public void setGroupPrefix(String group, String prefix) {
+        Group groupT = api.getGroups().name(group);
+        groupT.setPrefix(prefix);
+        groupT.save();
     }
+
+    public void setGroupPrefix(String group, String prefix, World world) {
+        Group groupT = api.getGroups().name(group);
+        groupT.setPrefix(prefix);
+        groupT.save();
+        // WORLD NOT SUPPORTED
+    }
+
+    public String getGroupPrefix(String group) {
+        return api.getGroups().name(group).getPrefix();
+    }
+
+    public String getGroupPrefix(String group, World world) {
+        return api.getGroups().name(group).getPrefix();
+        // WORLDS NOT SUPPORTED
+    }
+
+    public void setGroupSuffix(String group, String suffix) {
+        Group groupT = api.getGroups().name(group);
+        groupT.setSuffix(suffix);
+        groupT.save();
+    }
+
+    public void setGroupSuffix(String group, String suffix, World world) {
+        Group groupT = api.getGroups().name(group);
+        groupT.setSuffix(suffix);
+        groupT.save();
+        // WORLDS NOT SUPPORTED
+    }
+
+    public String getGroupSuffix(String group) {
+        return api.getGroups().name(group).getSuffix();
+    }
+
+    public String getGroupSuffix(String group, World world) {
+        return api.getGroups().name(group).getSuffix();
+        // WORLDS NOT SUPPORTED
+    }
+
 }
