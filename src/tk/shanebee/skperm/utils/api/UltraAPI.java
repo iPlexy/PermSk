@@ -3,6 +3,7 @@ package tk.shanebee.skperm.utils.api;
 import me.TechsCode.UltraPermissions.UltraPermissions;
 import me.TechsCode.UltraPermissions.UltraPermissionsAPI;
 import me.TechsCode.UltraPermissions.storage.objects.Group;
+import me.TechsCode.UltraPermissions.storage.objects.Permission;
 import me.TechsCode.UltraPermissions.storage.objects.User;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -11,6 +12,7 @@ import org.bukkit.World;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 
 public class UltraAPI implements API {
 
@@ -73,49 +75,168 @@ public class UltraAPI implements API {
         groupT.newPermission(permission).setExpiration(time.getTime()).create();
     }
 
-    public void removePerm(OfflinePlayer player, String permission) {}
+    public void removePerm(OfflinePlayer player, String permission) {
+        User user = api.getUsers().uuid(player.getUniqueId());
+        for (Permission perm : user.getPermissions().get()) {
+            if (perm.getName().equalsIgnoreCase(permission)) {
+                perm.remove();
+            }
+        }
+    }
 
-    public void removePerm(OfflinePlayer player, String permission, World world) {}
+    public void removePerm(OfflinePlayer player, String permission, World world) {
+        User user = api.getUsers().uuid(player.getUniqueId());
+        for (Permission perm : user.getPermissions().worlds(true, world.getName()).get()) {
+            if (perm.getName().equalsIgnoreCase(permission)) {
+                perm.remove();
+            }
+        }
+    }
 
-    public void removePerm(String group, String permission) {}
+    public void removePerm(String group, String permission) {
+        Group groupT = api.getGroups().name(group);
+        for (Permission perm : groupT.getPermissions().get()) {
+            if (perm.getName().equalsIgnoreCase(permission)) {
+                perm.remove();
+            }
+        }
+    }
 
-    public void removePerm(String group, String permission, World world) {}
+    public void removePerm(String group, String permission, World world) {
+        Group groupT = api.getGroups().name(group);
+        for (Permission perm : groupT.getPermissions().worlds(true, world.getName()).get()) {
+            if (perm.getName().equalsIgnoreCase(permission)) {
+                perm.remove();
+            }
+        }
+    }
 
-    public String[] getPerm(OfflinePlayer player) { return null;}
+    public String[] getPerm(OfflinePlayer player) {
+        User user = api.getUsers().uuid(player.getUniqueId());
+        ArrayList<String> list = new ArrayList<>();
+        for (Permission perm : user.getPermissions().get()) {
+            list.add(perm.getName());
+        }
+        return list.toArray(new String[0]);
+    }
 
-    public String[] getPerm(OfflinePlayer player, World world) {return null;}
+    public String[] getPerm(OfflinePlayer player, World world) {
+        User user = api.getUsers().uuid(player.getUniqueId());
+        ArrayList<String> list = new ArrayList<>();
+        for (Permission perm : user.getPermissions().worlds(true, world.getName()).get()) {
+            list.add(perm.getName());
+        }
+        return list.toArray(new String[0]);
+    }
 
-    public String[] getPerm(String group) {return null;}
+    public String[] getPerm(String group) {
+        Group groupT = api.getGroups().name(group);
+        ArrayList<String> list = new ArrayList<>();
+        for (Permission perm : groupT.getPermissions().get()) {
+            list.add(perm.getName());
+        }
+        return list.toArray(new String[0]);
+    }
 
-    public String[] getPerm(String group, World world) {return null;}
+    public String[] getPerm(String group, World world) {
+        Group groupT = api.getGroups().name(group);
+        ArrayList<String> list = new ArrayList<>();
+        for (Permission perm : groupT.getPermissions().worlds(true, world.getName()).get()) {
+            list.add(perm.getName());
+        }
+        return list.toArray(new String[0]);
+    }
 
-    public void createGroup(String group) {}
+    public void createGroup(String group) {
+        if (api.getGroups().name(group) == null) {
+            api.newGroup(group).create();
+        }
+    }
 
-    public void createGroup(String group, String[] parents) {}
+    public void createGroup(String group, String[] parents) {
+        if (api.getGroups().name(group) == null) {
+            api.newGroup(group).create();
+            Group groupT = api.getGroups().name(group);
+            for (String par : parents) {
+                Group parent = api.getGroups().name(par);
+                groupT.addGroup(parent);
+            }
+            groupT.save();
+        }
+    }
 
-    public void removeGroup(String group) {}
+    public void removeGroup(String group) {
+        api.getGroups().name(group).remove();
+    }
 
-    public void addPlayerToGroup(OfflinePlayer player, String group) {}
+    public void addPlayerToGroup(OfflinePlayer player, String group) {
+        User user = api.getUsers().uuid(player.getUniqueId());
+        Group groupT = api.getGroups().name(group);
+        if (groupT == null) return;
+        user.addGroup(groupT);
+        user.save();
+    }
 
-    public void addPlayerToGroup(OfflinePlayer player, String group, World world) {}
+    public void addPlayerToGroup(OfflinePlayer player, String group, World world) {
+        // TODO NOT SUPPORTED
+    }
 
-    public void addPlayerToGroup(OfflinePlayer player, String group, World world, int seconds) {}
+    public void addPlayerToGroup(OfflinePlayer player, String group, World world, int seconds) {
+        // TODO NOT SUPPORTED
+    }
 
-    public void addPlayerToGroup(OfflinePlayer player, String group, int seconds) {}
+    public void addPlayerToGroup(OfflinePlayer player, String group, int seconds) {
+        User user = api.getUsers().uuid(player.getUniqueId());
+        Group groupT = api.getGroups().name(group);
+        Timestamp time = Timestamp.from(Instant.now().plusSeconds(seconds));
+        user.addGroup(groupT, time.getTime());
+        user.save();
+    }
 
-    public void removePlayerFromGroup(OfflinePlayer player, String group) {}
+    public void removePlayerFromGroup(OfflinePlayer player, String group) {
+        User user = api.getUsers().uuid(player.getUniqueId());
+        Group groupT = api.getGroups().name(group);
+        if (groupT == null) return;
+        user.removeGroup(groupT);
+        user.save();
+    }
 
-    public void removePlayerFromGroup(OfflinePlayer player, String group, World world) {}
+    public void removePlayerFromGroup(OfflinePlayer player, String group, World world) {
+        // TODO NOT SUPPORTED
+    }
 
-    public OfflinePlayer[] getPlayersInGroup(String group) {return null;}
+    public OfflinePlayer[] getPlayersInGroup(String group) {
+        User user;
+        ArrayList<OfflinePlayer> list = new ArrayList<>();
+        for (OfflinePlayer player : Bukkit.getServer().getOfflinePlayers()) {
+            user = api.getUsers().uuid(player.getUniqueId());
+            if (user == null) continue;
+            if (user.getGroups().name(group) != null) {
+                list.add(player);
+            }
+        }
+        return list.toArray(new OfflinePlayer[0]);
+    }
 
-    public void setGroupWeight(String group, int weight) {}
+    public void setGroupWeight(String group, int weight) {
+        Group groupT = api.getGroups().name(group);
+        groupT.setPriority(weight);
+        groupT.save();
+    }
 
-    public void setGroupRank(String group, int rank) {}
+    public void setGroupRank(String group, int rank) {
+        // TODO NOT SUPPORTED
+    }
 
-    public int getGroupWeight(String group) {return 0;}
+    public int getGroupWeight(String group) {
+        Group groupT = api.getGroups().name(group);
+        return groupT.getPriority();
+    }
 
-    public int getGroupRank(String group) {return 0;}
+    public int getGroupRank(String group) {
+        return 0;
+        // TODO NOT SUPPORTED
+    }
 
     public void setGroupPrefix(String group, String prefix) {}
 
