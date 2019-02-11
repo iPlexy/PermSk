@@ -293,4 +293,20 @@ public interface API {
      */
     String getGroupSuffix(String group, World world);
 
+    void setPlayerPrefix(OfflinePlayer player, String prefix);
+
+    void setPlayerPrefix(OfflinePlayer player, String prefix, World world);
+
+    String getPlayerPrefix(OfflinePlayer player);
+
+    String getPlayerPrefix(OfflinePlayer player, World world);
+
+    void setPlayerSuffix(OfflinePlayer player, String suffix);
+
+    void setPlayerSuffix(OfflinePlayer player, String suffix, World world);
+
+    String getPlayerSuffix(OfflinePlayer player);
+
+    String getPlayerSuffix(OfflinePlayer player, World world);
+
 }
