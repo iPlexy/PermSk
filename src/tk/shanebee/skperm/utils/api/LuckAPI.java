@@ -397,4 +397,109 @@ public class LuckAPI implements API {
         return suffix;
     }
 
+    public void setPlayerPrefix(OfflinePlayer player, String prefix) {
+        api.getUserManager().loadUser(player.getUniqueId()).join();
+        User user = api.getUser(player.getUniqueId());
+        if (user == null) return;
+        for (Node node : user.getPermissions()) {
+            if (node.getPermission().startsWith("prefix."))
+                user.unsetPermission(node);
+        }
+        Node node = api.getNodeFactory().makePrefixNode(0, prefix).build();
+        user.setPermission(node);
+        api.getUserManager().saveUser(user);
+    }
+
+    public void setPlayerPrefix(OfflinePlayer player, String prefix, World world) {
+        api.getUserManager().loadUser(player.getUniqueId()).join();
+        User user = api.getUser(player.getUniqueId());
+        if (user == null) return;
+        for (Node node :user.getPermissions()) {
+            if (!node.getPermission().startsWith("prefix.")) continue;
+            if (!node.getWorld().toString().startsWith("Optional[" + world.getName() + "]")) continue;
+            user.unsetPermission(node);
+        }
+        Node node = api.getNodeFactory().makePrefixNode(0, prefix).setWorld(world.getName()).build();
+        user.setPermission(node);
+        api.getUserManager().saveUser(user);
+    }
+
+    public String getPlayerPrefix(OfflinePlayer player) {
+        api.getUserManager().loadUser(player.getUniqueId()).join();
+        User user = api.getUser(player.getUniqueId());
+
+        String prefix = null;
+        if (user == null) return null;
+        for (Node node : user.getPermissions()) {
+            if (!node.getPermission().startsWith("prefix.")) continue;
+            prefix = node.getPrefix().getValue();
+        }
+        return prefix;
+    }
+
+    public String getPlayerPrefix(OfflinePlayer player, World world) {
+        api.getUserManager().loadUser(player.getUniqueId()).join();
+        User user = api.getUser(player.getUniqueId());
+        String prefix = null;
+        if (user == null) return null;
+        for (Node node : user.getPermissions()) {
+            if (!node.getPermission().startsWith("prefix.")) continue;
+            if (!node.getWorld().toString().startsWith("Optional[" + world.getName() + "]")) continue;
+            prefix = node.getPrefix().getValue();
+        }
+        return prefix;
+    }
+
+    public void setPlayerSuffix(OfflinePlayer player, String suffix) {
+        api.getUserManager().loadUser(player.getUniqueId()).join();
+        User user = api.getUser(player.getUniqueId());
+        if (user == null) return;
+        for (Node node : user.getPermissions()) {
+            if (node.getPermission().startsWith("suffix."))
+                user.unsetPermission(node);
+        }
+        Node node = api.getNodeFactory().makeSuffixNode(0, suffix).build();
+        user.setPermission(node);
+        api.getUserManager().saveUser(user);
+    }
+
+    public void setPlayerSuffix(OfflinePlayer player, String suffix, World world) {
+        api.getUserManager().loadUser(player.getUniqueId()).join();
+        User user = api.getUser(player.getUniqueId());
+        if (user == null) return;
+        for (Node node :user.getPermissions()) {
+            if (!node.getPermission().startsWith("suffix.")) continue;
+            if (!node.getWorld().toString().startsWith("Optional[" + world.getName() + "]")) continue;
+            user.unsetPermission(node);
+        }
+        Node node = api.getNodeFactory().makeSuffixNode(0, suffix).setWorld(world.getName()).build();
+        user.setPermission(node);
+        api.getUserManager().saveUser(user);
+    }
+
+    public String getPlayerSuffix(OfflinePlayer player) {
+        api.getUserManager().loadUser(player.getUniqueId()).join();
+        User user = api.getUser(player.getUniqueId());
+        String suffix = null;
+        if (user == null) return null;
+        for (Node node : user.getPermissions()) {
+            if (!node.getPermission().startsWith("suffix.")) continue;
+            suffix = node.getSuffix().getValue();
+        }
+        return suffix;
+    }
+
+    public String getPlayerSuffix(OfflinePlayer player, World world) {
+        api.getUserManager().loadUser(player.getUniqueId()).join();
+        User user = api.getUser(player.getUniqueId());
+        String suffix = null;
+        if (user == null) return null;
+        for (Node node : user.getPermissions()) {
+            if (!node.getPermission().startsWith("suffix.")) continue;
+            if (!node.getWorld().toString().startsWith("Optional[" + world.getName() + "]")) continue;
+            suffix = node.getSuffix().getValue();
+        }
+        return suffix;
+    }
+
 }
