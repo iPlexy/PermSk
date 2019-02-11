@@ -281,4 +281,47 @@ public class UltraAPI implements API {
         // WORLDS NOT SUPPORTED
     }
 
+    public void setPlayerPrefix(OfflinePlayer player, String prefix) {
+        User user = api.getUsers().uuid(player.getUniqueId());
+        user.setPrefix(prefix);
+        user.save();
+    }
+
+    public void setPlayerPrefix(OfflinePlayer player, String prefix, World world) {
+        User user = api.getUsers().uuid(player.getUniqueId());
+        user.setPrefix(prefix);
+        user.save();
+    }
+
+    public String getPlayerPrefix(OfflinePlayer player) {
+        return api.getUsers().uuid(player.getUniqueId()).getPrefix();
+    }
+
+    public String getPlayerPrefix(OfflinePlayer player, World world) {
+        return api.getUsers().uuid(player.getUniqueId()).getPrefix();
+        // Does not support worlds
+    }
+
+    public void setPlayerSuffix(OfflinePlayer player, String suffix) {
+        User user = api.getUsers().uuid(player.getUniqueId());
+        user.setSuffix(suffix);
+        user.save();
+    }
+
+    public void setPlayerSuffix(OfflinePlayer player, String suffix, World world) {
+        User user = api.getUsers().uuid(player.getUniqueId());
+        user.setSuffix(suffix);
+        user.save();
+        // Does not support worlds
+    }
+
+    public String getPlayerSuffix(OfflinePlayer player) {
+        return api.getUsers().uuid(player.getUniqueId()).getSuffix();
+    }
+
+    public String getPlayerSuffix(OfflinePlayer player, World world) {
+        return api.getUsers().uuid(player.getUniqueId()).getSuffix();
+        // Does not support worlds
+    }
+
 }
