@@ -286,7 +286,8 @@ public class LuckAPI implements API {
     }
 
     public void setGroupRank(String group, int rank) {
-    } // TODO not supported by LuckPerms?
+        // Not supported in luck perms
+    }
 
     public int getGroupWeight(String group) {
         Group groupT = api.getGroup(group);
@@ -299,7 +300,8 @@ public class LuckAPI implements API {
 
     public int getGroupRank(String group) {
         return 0;
-    } // TODO not supported by LuckPerms?
+        // Not supported in LuckPerms
+    }
 
     public void setGroupPrefix(String group, String prefix) {
         Group groupT = api.getGroup(group);
