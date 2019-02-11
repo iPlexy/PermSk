@@ -10,6 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import tk.shanebee.skperm.utils.api.API;
 import tk.shanebee.skperm.utils.api.LuckAPI;
 import tk.shanebee.skperm.utils.api.PexAPI;
+import tk.shanebee.skperm.utils.api.UltraAPI;
 
 public class SkPerm extends JavaPlugin {
 
@@ -41,17 +42,25 @@ public class SkPerm extends JavaPlugin {
                 try {
                     addon.loadClasses("tk.shanebee.skperm.permPlugins", "elements");
                     api = (API) Class.forName(PexAPI.class.getName()).newInstance();
-                    sendConsoleMessage(prefix + ChatColor.GREEN + "[PEX] Dependency found, PEX syntaxes loaded");
+                    permPluginFound("PEX");
                 } catch (Exception e) {
-                    sendConsoleMessage(prefix + ChatColor.RED + "[PEX] Loading error, try restarting your server");
+                    permPluginLoadingError("PEX");
                 }
             } else if (Bukkit.getPluginManager().getPlugin("LuckPerms") != null) {
                 try {
                     addon.loadClasses("tk.shanebee.skperm.permPlugins", "elements");
                     api = (API) Class.forName(LuckAPI.class.getName()).newInstance();
-                    sendConsoleMessage(prefix + ChatColor.GREEN + "[LuckPerms] Dependency found, LuckPerms syntaxes loaded");
+                    permPluginFound("LuckPerms");
                 } catch (Exception e) {
-                    sendConsoleMessage(prefix + ChatColor.RED + "[LuckPerms] Loading error, try restarting your server");
+                    permPluginLoadingError("LuckPerms");
+                }
+            } else if (Bukkit.getPluginManager().getPlugin("UltraPermissions") != null) {
+                try {
+                    addon.loadClasses("tk.shanebee.skperm.permPlugins", "elements");
+                    api = (API) Class.forName(UltraAPI.class.getName()).newInstance();
+                    permPluginFound("UltraPermissions");
+                } catch (Exception e) {
+                    permPluginLoadingError("UltraPermissions");
                 }
             } else {
                 sendConsoleMessage(prefix + ChatColor.YELLOW + "[PermPlugin] Dependency not found, ignoring PermPlugin syntaxes");
@@ -74,8 +83,18 @@ public class SkPerm extends JavaPlugin {
         return perms != null;
     }
 
-    private static void sendConsoleMessage(String message) {
+    private void sendConsoleMessage(String message) {
         Bukkit.getConsoleSender().sendMessage(message);
+    }
+
+    private void permPluginFound(String plugin) {
+        String plug = ChatColor.translateAlternateColorCodes('&', "&7[&b" + plugin + "&7] ");
+        Bukkit.getConsoleSender().sendMessage(prefix + plug + ChatColor.GREEN + "Dependency found, permission plugin syntaxes loaded");
+    }
+
+    private void permPluginLoadingError(String plugin) {
+        String plug = ChatColor.translateAlternateColorCodes('&', "&7[&b" + plugin + "&7] ");
+        Bukkit.getConsoleSender().sendMessage(prefix + plug + ChatColor.RED + "Loading error, try restarting your server");
     }
 
     public static API getAPI() {
