@@ -25,7 +25,7 @@ import tk.shanebee.skperm.SkPerm;
 @Since("1.0.0")
 public class ExprPlayerGroup extends SimpleExpression<OfflinePlayer> {
 
-    private Permission manager = SkPerm.perms;
+    private Permission manager = SkPerm.getPerms();
 
     static {
         Skript.registerExpression(ExprPlayerGroup.class, OfflinePlayer.class, ExpressionType.PROPERTY,

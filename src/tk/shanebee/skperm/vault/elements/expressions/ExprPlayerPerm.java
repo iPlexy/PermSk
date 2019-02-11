@@ -31,7 +31,7 @@ import java.util.Set;
 @Since("1.0.0")
 public class ExprPlayerPerm extends SimpleExpression<String> {
 
-    private Permission manager = SkPerm.perms;
+    private Permission manager = SkPerm.getPerms();
 
     static {
         Skript.registerExpression(ExprPlayerPerm.class, String.class, ExpressionType.PROPERTY,

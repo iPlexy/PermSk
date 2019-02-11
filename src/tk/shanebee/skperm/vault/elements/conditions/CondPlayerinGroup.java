@@ -20,7 +20,7 @@ import tk.shanebee.skperm.SkPerm;
 @Since("1.0.0")
 public class CondPlayerinGroup extends Condition {
 
-    private Permission manager = SkPerm.perms;
+    private Permission manager = SkPerm.getPerms();
 
     static {
         PropertyCondition.register(CondPlayerinGroup.class,

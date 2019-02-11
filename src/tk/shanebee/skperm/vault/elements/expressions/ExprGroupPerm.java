@@ -23,7 +23,7 @@ import tk.shanebee.skperm.SkPerm;
 @Since("1.0.0")
 public class ExprGroupPerm extends SimpleExpression<String> {
 
-    private Permission manager = SkPerm.perms;
+    private Permission manager = SkPerm.getPerms();
 
     static {
         Skript.registerExpression(ExprGroupPerm.class, String.class, ExpressionType.PROPERTY,
