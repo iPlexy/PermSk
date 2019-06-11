@@ -1,6 +1,6 @@
 main: tk.shanebee.skperm.SkPerm
 name: Sk-Perm
-version: 2.2.2
+version: 2.3.0
 author: ShaneBee
 website: https://github.com/ShaneBeee/Sk-Perm
 softdepend: [Vault, PermissionsEX]
