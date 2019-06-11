@@ -9,6 +9,8 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import tk.shanebee.skperm.utils.api.API;
 
+import java.io.IOException;
+
 public class SkPerm extends JavaPlugin {
 
     private static Permission perms;
@@ -21,7 +23,7 @@ public class SkPerm extends JavaPlugin {
         if ((Bukkit.getPluginManager().getPlugin("Skript") != null) && (Skript.isAcceptRegistrations())) {
             addon = Skript.registerAddon(this);
             try {
-                addon.loadClasses("tk.shanebee.skperm.vault", "elements");
+                addon.loadClasses("tk.shanebee.skperm.misc", "elements");
                 sendConsoleMessage("&7[&bSkript&7]&a Dependency found, loading Skript syntaxes");
             } catch (Exception e) {
                 sendConsoleMessage("&cLoading error, try restarting your server");
@@ -29,12 +31,15 @@ public class SkPerm extends JavaPlugin {
                 return;
             }
             if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
-                setupPermissions();
-                sendConsoleMessage("&7[&bVault&7] &aDependency found, Vault syntaxes loaded");
+                try {
+                    setupPermissions();
+                    addon.loadClasses("tk.shanebee.skperm.vault", "elements");
+                    sendConsoleMessage("&7[&bVault&7] &aDependency found, Vault syntaxes loaded");
+                } catch (IOException e) {
+                    sendConsoleMessage("&7[&bVault&7] &cError loading Vault syntaxes");
+                }
             } else {
-                sendConsoleMessage("&7[&eVault&7]&c Dependency not found, plugin disabling");
-                Bukkit.getPluginManager().disablePlugin(this);
-                return;
+                sendConsoleMessage("&7[&eVault&7]&c Dependency not found, ignoring Vault syntaxes");
             }
             if (Bukkit.getPluginManager().getPlugin("PermissionsEx") != null) {
                 loadApi("PermissionsEX", "PexAPI");
