@@ -36,7 +36,7 @@ public class SkPerm extends JavaPlugin {
                 Bukkit.getPluginManager().disablePlugin(this);
                 return;
             }
-            if (Bukkit.getPluginManager().getPlugin("PermissionsEX") != null) {
+            if (Bukkit.getPluginManager().getPlugin("PermissionsEx") != null) {
                 loadApi("PermissionsEX", "PexAPI");
             } else if (Bukkit.getPluginManager().getPlugin("LuckPerms") != null) {
                 loadApi("LuckPerms", "LuckAPI");
