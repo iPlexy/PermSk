@@ -1,0 +1,10 @@
+main: de.iplexy.skperm.SkPerm
+name: PermSk
+version: 1.0
+authors:
+  - ShaneBee
+  - iPlexy
+website: https://iplexy.de
+depend:
+  - Skript
+softdepend: [Vault, PermissionsEx, LuckPerms, UltraPermissions]
