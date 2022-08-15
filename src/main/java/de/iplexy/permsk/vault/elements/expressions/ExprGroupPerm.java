@@ -57,12 +57,8 @@ public class ExprGroupPerm extends SimpleExpression<String> {
         String w = world == null ? null : world.getSingle(e).getName();
         for (String perm : perms) {
             switch (mode) {
-                case ADD:
-                    manager.groupAdd(w, group.getSingle(e), perm);
-                    break;
-                case REMOVE:
-                    manager.groupRemove(w, group.getSingle(e), perm);
-                    break;
+                case ADD -> manager.groupAdd(w, group.getSingle(e), perm);
+                case REMOVE -> manager.groupRemove(w, group.getSingle(e), perm);
             }
         }
     }

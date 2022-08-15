@@ -1,4 +1,4 @@
-package de.iplexy.permsk.permPlugins.elements.effects;
+package de.iplexy.permsk.plugins.elements.effects;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.*;

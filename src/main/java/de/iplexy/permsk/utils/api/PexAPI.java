@@ -14,7 +14,7 @@ import java.util.List;
 
 public class PexAPI implements API {
     
-    PermissionManager api = PermissionsEx.getPermissionManager();
+    private final PermissionManager api = PermissionsEx.getPermissionManager();
 
     public void addPerm(OfflinePlayer player, String permission) {
         api.getUser(player.getName()).addPermission(permission);

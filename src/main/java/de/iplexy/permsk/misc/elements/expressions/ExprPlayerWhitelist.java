@@ -52,16 +52,15 @@ public class ExprPlayerWhitelist extends SimpleExpression<OfflinePlayer> {
 
 	@Override
 	public void change(Event e, Object[] delta, ChangeMode mode) {
-		if (mode == ChangeMode.ADD) {
-			((OfflinePlayer) delta[0]).setWhitelisted(true);
-		} else if (mode == ChangeMode.REMOVE) {
-			((OfflinePlayer) delta[0]).setWhitelisted(false);
-		} else if (mode == ChangeMode.RESET) {
-			for (OfflinePlayer player : Bukkit.getWhitelistedPlayers()) {
-				player.setWhitelisted(false);
+		switch (mode) {
+			case ADD -> ((OfflinePlayer) delta[0]).setWhitelisted(true);
+			case REMOVE -> ((OfflinePlayer) delta[0]).setWhitelisted(false);
+			case RESET -> {
+				for (OfflinePlayer player : Bukkit.getWhitelistedPlayers()) {
+					player.setWhitelisted(false);
+				}
 			}
-		} else if (mode == ChangeMode.SET) {
-			Bukkit.setWhitelist(((Boolean) delta[0]));
+			case SET -> Bukkit.setWhitelist(((Boolean) delta[0]));
 		}
 	}
 

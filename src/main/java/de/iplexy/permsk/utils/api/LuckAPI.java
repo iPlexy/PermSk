@@ -21,7 +21,7 @@ import java.util.*;
 
 public class LuckAPI implements API{
 
-    private LuckPerms api = LuckPermsProvider.get();
+    private final LuckPerms api = LuckPermsProvider.get();
 
     public void addPerm(OfflinePlayer player, String permission) {
         Node node = Node.builder(permission).build();
