@@ -85,7 +85,7 @@
             <artifactId>permissions</artifactId>
             <version>1.23.4</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/PermissionsEx-1.23.4.jar</systemPath>
+            <systemPath>${project.basedir}/libs/PermissionsEx-1.23.4.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
