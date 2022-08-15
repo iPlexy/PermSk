@@ -12,26 +12,26 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 
 public class SkPerm extends JavaPlugin {
-    
+
     private static Permission perms;
     private static API api;
     SkPerm instance;
     SkriptAddon addon;
     private final String prefix = ChatColor.translateAlternateColorCodes('&', "&7[&bPermSk&7] ");
-    
+
     public static API getAPI() {
         return api;
     }
-    
+
     public static Permission getPerms() {
         return perms;
     }
-    
+
     @Override
     public void onDisable() {
         sendConsoleMessage("Unloaded successfully");
     }
-    
+
     @Override
     public void onEnable() {
         instance = this;
@@ -72,20 +72,20 @@ public class SkPerm extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
         }
     }
-    
+
     private void sendConsoleMessage(String message) {
         Bukkit.getConsoleSender().sendMessage(prefix + ChatColor.translateAlternateColorCodes('&', message));
     }
-    
+
     private boolean setupPermissions() {
         RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
         perms = rsp.getProvider();
         return perms != null;
     }
-    
+
     private void loadApi(String permPlugin, String API) {
         try {
-            addon.loadClasses("de.iplexy.permsk.permPlugins", "elements");
+            addon.loadClasses("de.iplexy.permsk.plugins", "elements");
             api = (API) Class.forName("de.iplexy.permsk.utils.api." + API).newInstance();
             permPluginFound(permPlugin);
         } catch (Exception e) {
@@ -93,15 +93,15 @@ public class SkPerm extends JavaPlugin {
             throw new RuntimeException(e);
         }
     }
-    
+
     private void permPluginFound(String plugin) {
         String plug = ChatColor.translateAlternateColorCodes('&', "&7[&b" + plugin + "&7] ");
         sendConsoleMessage(plug + "&aDependency found, permission plugin syntaxes loaded");
     }
-    
+
     private void permPluginLoadingError(String plugin) {
         String plug = ChatColor.translateAlternateColorCodes('&', "&7[&b" + plugin + "&7] ");
         sendConsoleMessage(plug + "&aLoading error, try restarting your server");
     }
-    
+
 }
