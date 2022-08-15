@@ -138,13 +138,13 @@ public class UltraAPI implements API {
     }
 
     public void createGroup(String group) {
-        if (api.getGroups().name(group) == null) {
+        if (api.getGroups().name(group).isEmpty()) {
             api.newGroup(group).create();
         }
     }
 
     public void createGroup(String group, String[] parents) {
-        if (api.getGroups().name(group) == null) {
+        if (api.getGroups().name(group).isEmpty()) {
             api.newGroup(group).create();
             Group groupT = api.getGroups().name(group).orElseThrow();
             for (String par : parents) {
@@ -163,7 +163,6 @@ public class UltraAPI implements API {
     public void addPlayerToGroup(OfflinePlayer player, String group) {
         User user = api.getUsers().uuid(player.getUniqueId()).orElseThrow();
         Group groupT = api.getGroups().name(group).orElseThrow();
-        if (groupT == null) return;
         user.addGroup(groupT);
         //user.save();
     }
