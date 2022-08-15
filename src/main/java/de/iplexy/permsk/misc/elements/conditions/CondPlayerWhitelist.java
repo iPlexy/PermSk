@@ -17,30 +17,30 @@ import org.bukkit.event.Event;
 @Examples({"if arg-1 is whitelisted:", "if arg-1 is not whitelisted:"})
 @Since("2.3.0")
 public class CondPlayerWhitelist extends Condition {
-
-	private Expression<OfflinePlayer> player;
-
-	static {
-		Skript.registerCondition(CondPlayerWhitelist.class, "%offlineplayer% is whitelisted", "%offlineplayer% is(n'| no)t whitelisted");
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public boolean init(Expression<?>[] exprs, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-		player = (Expression<OfflinePlayer>) exprs[0];
-		setNegated(i == 1);
-		return true;
-	}
-
-	@Override
-	public boolean check(Event event) {
-		boolean check = player.getSingle(event).isWhitelisted();
-		return (isNegated() != check);
-	}
-
-	@Override
-	public String toString(Event e, boolean b) {
-		return player.toString(e, b) + " whitelisted";
-	}
-
+    
+    static {
+        Skript.registerCondition(CondPlayerWhitelist.class, "%offlineplayer% is whitelisted", "%offlineplayer% is(n'| no)t whitelisted");
+    }
+    
+    private Expression<OfflinePlayer> player;
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean init(Expression<?>[] exprs, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
+        player = (Expression<OfflinePlayer>) exprs[0];
+        setNegated(i == 1);
+        return true;
+    }
+    
+    @Override
+    public boolean check(Event event) {
+        boolean check = player.getSingle(event).isWhitelisted();
+        return (isNegated() != check);
+    }
+    
+    @Override
+    public String toString(Event e, boolean b) {
+        return player.toString(e, b) + " whitelisted";
+    }
+    
 }
