@@ -12,13 +12,26 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 
 public class SkPerm extends JavaPlugin {
-
+    
     private static Permission perms;
     private static API api;
     SkPerm instance;
     SkriptAddon addon;
-    private String prefix = ChatColor.translateAlternateColorCodes('&', "&7[&bPermSk&7] ");
-
+    private final String prefix = ChatColor.translateAlternateColorCodes('&', "&7[&bPermSk&7] ");
+    
+    public static API getAPI() {
+        return api;
+    }
+    
+    public static Permission getPerms() {
+        return perms;
+    }
+    
+    @Override
+    public void onDisable() {
+        sendConsoleMessage("Unloaded successfully");
+    }
+    
     @Override
     public void onEnable() {
         instance = this;
@@ -55,36 +68,21 @@ public class SkPerm extends JavaPlugin {
             sendConsoleMessage("&aAdd-on loaded successfully");
         } else {
             sendConsoleMessage("&c[Skript] Dependency was not found, plugin disabling");
-            sendConsoleMessage(Skript.isAcceptRegistrations()+"");
+            sendConsoleMessage(Skript.isAcceptRegistrations() + "");
             Bukkit.getPluginManager().disablePlugin(this);
         }
     }
-
-    @Override
-    public void onDisable() {
-        sendConsoleMessage("Unloaded successfully");
+    
+    private void sendConsoleMessage(String message) {
+        Bukkit.getConsoleSender().sendMessage(prefix + ChatColor.translateAlternateColorCodes('&', message));
     }
-
+    
     private boolean setupPermissions() {
         RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
         perms = rsp.getProvider();
         return perms != null;
     }
-
-    private void sendConsoleMessage(String message) {
-        Bukkit.getConsoleSender().sendMessage(prefix + ChatColor.translateAlternateColorCodes('&', message));
-    }
-
-    private void permPluginFound(String plugin) {
-        String plug = ChatColor.translateAlternateColorCodes('&', "&7[&b" + plugin + "&7] ");
-        sendConsoleMessage(plug + "&aDependency found, permission plugin syntaxes loaded");
-    }
-
-    private void permPluginLoadingError(String plugin) {
-        String plug = ChatColor.translateAlternateColorCodes('&', "&7[&b" + plugin + "&7] ");
-        sendConsoleMessage(plug + "&aLoading error, try restarting your server");
-    }
-
+    
     private void loadApi(String permPlugin, String API) {
         try {
             addon.loadClasses("de.iplexy.permsk.permPlugins", "elements");
@@ -95,13 +93,15 @@ public class SkPerm extends JavaPlugin {
             throw new RuntimeException(e);
         }
     }
-
-    public static API getAPI() {
-        return api;
+    
+    private void permPluginFound(String plugin) {
+        String plug = ChatColor.translateAlternateColorCodes('&', "&7[&b" + plugin + "&7] ");
+        sendConsoleMessage(plug + "&aDependency found, permission plugin syntaxes loaded");
     }
-
-    public static Permission getPerms() {
-        return perms;
+    
+    private void permPluginLoadingError(String plugin) {
+        String plug = ChatColor.translateAlternateColorCodes('&', "&7[&b" + plugin + "&7] ");
+        sendConsoleMessage(plug + "&aLoading error, try restarting your server");
     }
-
+    
 }

@@ -17,24 +17,24 @@ import org.bukkit.event.Event;
 @Examples("reload whitelist")
 @Since("2.3.0")
 public class EffReloadWhitelist extends Effect {
-
-	static {
-		Skript.registerEffect(EffReloadWhitelist.class, "reload [server] whitelist");
-	}
-
-	@Override
-	public boolean init(Expression<?>[] expressions, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-		return true;
-	}
-
-	@Override
-	protected void execute(Event event) {
-		Bukkit.reloadWhitelist();
-	}
-
-	@Override
-	public String toString(Event event, boolean b) {
-		return "reload whitelist";
-	}
-
+    
+    static {
+        Skript.registerEffect(EffReloadWhitelist.class, "reload [server] whitelist");
+    }
+    
+    @Override
+    public boolean init(Expression<?>[] expressions, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
+        return true;
+    }
+    
+    @Override
+    protected void execute(Event event) {
+        Bukkit.reloadWhitelist();
+    }
+    
+    @Override
+    public String toString(Event event, boolean b) {
+        return "reload whitelist";
+    }
+    
 }

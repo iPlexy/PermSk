@@ -9,32 +9,31 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
+import de.iplexy.permsk.SkPerm;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.World;
 import org.bukkit.event.Event;
-import de.iplexy.permsk.SkPerm;
 
 @Name("Vault Universal: Group's Permissions")
 @Description("Add or remove permissions to/from a group. Worlds are only supported if your permission plugin supports them.")
 @Examples({"add \"essentials.chat\" to permissions of group \"members\"",
-        "add \"essentials.home\" to permissions of group \"knight\" in world \"world\"",
-        "remove \"essentials.gamemode\" from permissions of group \"moderator\""})
+    "add \"essentials.home\" to permissions of group \"knight\" in world \"world\"",
+    "remove \"essentials.gamemode\" from permissions of group \"moderator\""})
 @RequiredPlugins("Vault")
 @Since("1.0.0")
 public class ExprGroupPerm extends SimpleExpression<String> {
-
-    private Permission manager = SkPerm.getPerms();
-
+    
     static {
         Skript.registerExpression(ExprGroupPerm.class, String.class, ExpressionType.PROPERTY,
-                "perm[ission][s] of group %string% [in [world]%-world%]",
-                "group %string%'s perm[ission][s] [in [world]%-world%]");
+            "perm[ission][s] of group %string% [in [world]%-world%]",
+            "group %string%'s perm[ission][s] [in [world]%-world%]");
     }
-
+    
+    private final Permission manager = SkPerm.getPerms();
     @SuppressWarnings("null")
     private Expression<String> group;
     private Expression<World> world;
-
+    
     @SuppressWarnings({"null", "unchecked"})
     @Override
     public boolean init(Expression<?>[] exprs, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
@@ -42,7 +41,12 @@ public class ExprGroupPerm extends SimpleExpression<String> {
         world = (Expression<World>) exprs[1];
         return true;
     }
-
+    
+    @Override
+    protected String[] get(Event event) {
+        return null;
+    }
+    
     @Override
     public Class<?>[] acceptChange(ChangeMode mode) {
         if (mode == ChangeMode.ADD || mode == ChangeMode.REMOVE) {
@@ -50,42 +54,33 @@ public class ExprGroupPerm extends SimpleExpression<String> {
         }
         return null;
     }
-
+    
     @Override
     public void change(Event e, Object[] delta, ChangeMode mode) {
         String[] perms = (String[]) delta;
         String w = world == null ? null : world.getSingle(e).getName();
         for (String perm : perms) {
             switch (mode) {
-                case ADD:
-                    manager.groupAdd(w, group.getSingle(e), perm);
-                    break;
-                case REMOVE:
-                    manager.groupRemove(w, group.getSingle(e), perm);
-                    break;
+                case ADD -> manager.groupAdd(w, group.getSingle(e), perm);
+                case REMOVE -> manager.groupRemove(w, group.getSingle(e), perm);
             }
         }
     }
-
-    @Override
-    protected String[] get(Event event) {
-        return null;
-    }
-
+    
     @Override
     public boolean isSingle() {
         return false;
     }
-
+    
     @Override
     public Class<? extends String> getReturnType() {
         return String.class;
     }
-
+    
     @Override
     public String toString(Event event, boolean debug) {
         return "permission of group " + group.toString(event, debug);
     }
-
+    
 }
 

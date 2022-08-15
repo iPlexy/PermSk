@@ -17,26 +17,27 @@ import org.bukkit.event.Event;
 @Examples({"if server is whitelisted:", "if server is not whitelisted:"})
 @Since("2.3.0")
 public class CondServerWhitelist extends Condition {
-
-
-	static {
-		Skript.registerCondition(CondServerWhitelist.class, "server is whitelisted", "server is(n'| no)t whitelisted");
-	}
-	@Override
-	public boolean init(Expression<?>[] expressions, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-		setNegated(i == 1);
-		return true;
-	}
-
-	@Override
-	public boolean check(Event event) {
-		boolean check = Bukkit.hasWhitelist();
-		return (isNegated() != check);
-	}
-
-	@Override
-	public String toString(Event e, boolean b) {
-		return "server whitelisted";
-	}
-
+    
+    
+    static {
+        Skript.registerCondition(CondServerWhitelist.class, "server is whitelisted", "server is(n'| no)t whitelisted");
+    }
+    
+    @Override
+    public boolean init(Expression<?>[] expressions, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
+        setNegated(i == 1);
+        return true;
+    }
+    
+    @Override
+    public boolean check(Event event) {
+        boolean check = Bukkit.hasWhitelist();
+        return (isNegated() != check);
+    }
+    
+    @Override
+    public String toString(Event e, boolean b) {
+        return "server whitelisted";
+    }
+    
 }
