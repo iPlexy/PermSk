@@ -14,4 +14,6 @@ This is a rework of @ShaneBeee's plugin "Sk-Perm" this plugin will work in 1.19.
 Supported Permission Plugins are:
   - LuckPerms (recommended)
   - PermissionsEx
-  - UltimatePermissions (not tested)
+  - UltimatePermissions
+
+[![SkriptHubViewTheDocs](http://skripthub.net/static/addon/ViewTheDocsButton.png)](http://skripthub.net/docs/?addon=PermSk)
