@@ -5,7 +5,6 @@ import ch.njol.skript.SkriptAddon;
 import de.iplexy.permsk.utils.api.API;
 import net.milkbowl.vault.permission.Permission;
 import org.bstats.bukkit.Metrics;
-import org.bstats.charts.DrilldownPie;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,16 +12,14 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SkPerm extends JavaPlugin {
 
     private static Permission perms;
     private static API api;
+    private final String prefix = ChatColor.translateAlternateColorCodes('&', "&7[&bPermSk&7] ");
     SkPerm instance;
     SkriptAddon addon;
-    private final String prefix = ChatColor.translateAlternateColorCodes('&', "&7[&bPermSk&7] ");
 
     public static API getAPI() {
         return api;
@@ -110,7 +107,7 @@ public class SkPerm extends JavaPlugin {
         sendConsoleMessage(plug + "&aLoading error, try restarting your server");
     }
 
-    private void loadStats(){
+    private void loadStats() {
         Metrics metrics = new Metrics(this, 16435);
         metrics.addCustomChart(new SimplePie("skript_version", () -> Skript.getVersion().toString()));
         sendConsoleMessage("§7[§bbStats§7] Sucessfully loaded");

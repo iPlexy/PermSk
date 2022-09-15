@@ -288,6 +288,7 @@ public class LuckAPI implements API {
     }
     
     public void setGroupPrefix(String group, String prefix, World world) {
+        //TODO make it work
         /*
         Group groupT = api.getGroupManager().getGroup(group);
         Node node = api.getNodeFactory().makePrefixNode(0, prefix).setWorld(world.getName()).build();
@@ -308,6 +309,7 @@ public class LuckAPI implements API {
     }
     
     public String getGroupPrefix(String group, World world) {
+        //TODO make it work
         /*
         Group groupT = api.getGroupManager().getGroup(group);
         String prefix = null;
@@ -336,6 +338,7 @@ public class LuckAPI implements API {
     }
     
     public void setGroupSuffix(String group, String suffix, World world) {
+        //TODO make it work
         /*
         Group groupT = api.getGroupManager().getGroup(group);
         Node node = api.getNodeFactory().makeSuffixNode(0, suffix).setWorld(world.getName()).build();
@@ -357,6 +360,7 @@ public class LuckAPI implements API {
     }
     
     public String getGroupSuffix(String group, World world) {
+        //TODO make it work
         /*
         Group groupT = api.getGroupManager().getGroup(group);
         String suffix = null;
@@ -384,6 +388,7 @@ public class LuckAPI implements API {
     
     
     public void setPlayerPrefix(OfflinePlayer player, String prefix, World world) {
+        //TODO make it work
         /*
         api.getUserManager().loadUser(player.getUniqueId()).join();
         User user = api.getUser(player.getUniqueId());
@@ -406,6 +411,7 @@ public class LuckAPI implements API {
     }
     
     public String getPlayerPrefix(OfflinePlayer player, World world) {
+        //TODO make it work
         /*
         api.getUserManager().loadUser(player.getUniqueId()).join();
         User user = api.getUser(player.getUniqueId());
@@ -435,6 +441,7 @@ public class LuckAPI implements API {
     
     
     public void setPlayerSuffix(OfflinePlayer player, String suffix, World world) {
+        //TODO make it work
         /*
         api.getUserManager().loadUser(player.getUniqueId()).join();
         User user = api.getUser(player.getUniqueId());
@@ -458,6 +465,7 @@ public class LuckAPI implements API {
     
     
     public String getPlayerSuffix(OfflinePlayer player, World world) {
+        //TODO make it work
         /*
         api.getUserManager().loadUser(player.getUniqueId()).join();
         User user = api.getUser(player.getUniqueId());
