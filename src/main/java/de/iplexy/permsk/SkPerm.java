@@ -3,6 +3,7 @@ package de.iplexy.permsk;
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
 import de.iplexy.permsk.utils.api.API;
+import de.iplexy.permsk.utils.api.GroupManagerAPI;
 import net.milkbowl.vault.permission.Permission;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
@@ -18,7 +19,7 @@ public class SkPerm extends JavaPlugin {
     private static Permission perms;
     private static API api;
     private final String prefix = ChatColor.translateAlternateColorCodes('&', "&7[&bPermSk&7] ");
-    SkPerm instance;
+    private static SkPerm instance;
     SkriptAddon addon;
 
     public static API getAPI() {
@@ -64,7 +65,9 @@ public class SkPerm extends JavaPlugin {
                 loadApi("LuckPerms", "LuckAPI");
             } else if (Bukkit.getPluginManager().getPlugin("UltraPermissions") != null) {
                 loadApi("UltraPermissions", "UltraAPI");
-            } else {
+            } else if (GroupManagerAPI.hasGroupManager()) {
+                loadApi("GroupManager", "GroupManagerAPI");
+            }  else {
                 sendConsoleMessage("&7[&ePermPlugin&7]&e No permission plugin found, ignoring PermPlugin syntaxes");
             }
             sendConsoleMessage("&aAdd-on loaded successfully");
@@ -111,6 +114,10 @@ public class SkPerm extends JavaPlugin {
         Metrics metrics = new Metrics(this, 16435);
         metrics.addCustomChart(new SimplePie("skript_version", () -> Skript.getVersion().toString()));
         sendConsoleMessage("§7[§bbStats§7] Sucessfully loaded");
+    }
+
+    public static SkPerm getInstance(){
+        return instance;
     }
 
 }
