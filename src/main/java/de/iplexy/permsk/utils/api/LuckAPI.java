@@ -3,14 +3,18 @@ package de.iplexy.permsk.utils.api;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.cacheddata.CachedPermissionData;
+import net.luckperms.api.context.DefaultContextKeys;
 import net.luckperms.api.context.ImmutableContextSet;
 import net.luckperms.api.model.data.DataMutateResult;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.Node;
+import net.luckperms.api.node.NodeType;
 import net.luckperms.api.node.matcher.NodeMatcher;
 import net.luckperms.api.node.types.InheritanceNode;
 import net.luckperms.api.node.types.PermissionNode;
+import net.luckperms.api.node.types.PrefixNode;
+import net.luckperms.api.node.types.SuffixNode;
 import net.luckperms.api.query.QueryMode;
 import net.luckperms.api.query.QueryOptions;
 import org.bukkit.Bukkit;
@@ -288,19 +292,10 @@ public class LuckAPI implements API {
     }
     
     public void setGroupPrefix(String group, String prefix, World world) {
-        //TODO make it work
-        /*
-        Group groupT = api.getGroupManager().getGroup(group);
-        Node node = api.getNodeFactory().makePrefixNode(0, prefix).setWorld(world.getName()).build();
-        if (groupT == null) return;
-        for (Node nodeD : api.getGroupManager().getGroup(group).getPermissions()) {
-            if (!nodeD.getPermission().startsWith("prefix.")) continue;
-            if (!nodeD.getWorld().toString().startsWith("Optional[" + world.getName() + "]")) continue;
-            groupT.unsetPermission(nodeD);
-        }
-        groupT.setPermission(node);
-        api.getGroupManager().saveGroup(groupT);
-         */
+        PrefixNode node = PrefixNode.builder(prefix, getGroupWeight(group)).withContext(DefaultContextKeys.WORLD_KEY, world.getName()).build();
+        api.getGroupManager().modifyGroup(group, (Group theGroup) -> {
+            DataMutateResult result = theGroup.data().add(node);
+        });
     }
     
     public String getGroupPrefix(String group) {
@@ -309,19 +304,12 @@ public class LuckAPI implements API {
     }
     
     public String getGroupPrefix(String group, World world) {
-        //TODO make it work
-        /*
-        Group groupT = api.getGroupManager().getGroup(group);
-        String prefix = null;
-        if (groupT == null) return null;
-        for (Node node : groupT.getPermissions()) {
-            if (!node.getPermission().startsWith("prefix.")) continue;
-            if (!node.getWorld().toString().startsWith("Optional[" + world.getName() + "]")) continue;
-            prefix = node.getPrefix().getValue();
+        //TODO TEST
+        for(PrefixNode node : api.getGroupManager().getGroup(group).getNodes(NodeType.PREFIX)){
+            if(node.getContexts().contains(DefaultContextKeys.WORLD_KEY, world.getName())){
+                return node.getMetaValue();
+            }
         }
-        return prefix;
-
-         */
         return "null";
     }
     
@@ -338,19 +326,10 @@ public class LuckAPI implements API {
     }
     
     public void setGroupSuffix(String group, String suffix, World world) {
-        //TODO make it work
-        /*
-        Group groupT = api.getGroupManager().getGroup(group);
-        Node node = api.getNodeFactory().makeSuffixNode(0, suffix).setWorld(world.getName()).build();
-        if (groupT == null) return;
-        for (Node nodeD : api.getGroupManager().getGroup(group).getPermissions()) {
-            if (!nodeD.getPermission().startsWith("suffix.")) continue;
-            if (!nodeD.getWorld().toString().startsWith("Optional[" + world.getName() + "]")) continue;
-            groupT.unsetPermission(nodeD);
-        }
-        groupT.setPermission(node);
-        api.getGroupManager().saveGroup(groupT);
-        */
+        SuffixNode node = SuffixNode.builder(suffix, getGroupWeight(group)).withContext(DefaultContextKeys.WORLD_KEY, world.getName()).build();
+        api.getGroupManager().modifyGroup(group, (Group theGroup) -> {
+            DataMutateResult result = theGroup.data().add(node);
+        });
     }
     
     
@@ -360,18 +339,12 @@ public class LuckAPI implements API {
     }
     
     public String getGroupSuffix(String group, World world) {
-        //TODO make it work
-        /*
-        Group groupT = api.getGroupManager().getGroup(group);
-        String suffix = null;
-        if (groupT == null) return null;
-        for (Node node : groupT.getPermissions()) {
-            if (!node.getPermission().startsWith("suffix.")) continue;
-            if (!node.getWorld().toString().startsWith("Optional[" + world.getName() + "]")) continue;
-            suffix = node.getSuffix().getValue();
+        //TODO TEST
+        for(SuffixNode node : api.getGroupManager().getGroup(group).getNodes(NodeType.SUFFIX)){
+            if(node.getContexts().contains(DefaultContextKeys.WORLD_KEY, world.getName())){
+                return node.getMetaValue();
+            }
         }
-        return suffix;
-         */
         return "null";
     }
     
@@ -388,20 +361,10 @@ public class LuckAPI implements API {
     
     
     public void setPlayerPrefix(OfflinePlayer player, String prefix, World world) {
-        //TODO make it work
-        /*
-        api.getUserManager().loadUser(player.getUniqueId()).join();
-        User user = api.getUser(player.getUniqueId());
-        if (user == null) return;
-        for (Node node :user.getPermissions()) {
-            if (!node.getPermission().startsWith("prefix.")) continue;
-            if (!node.getWorld().toString().startsWith("Optional[" + world.getName() + "]")) continue;
-            user.unsetPermission(node);
-        }
-        Node node = api.getNodeFactory().makePrefixNode(0, prefix).setWorld(world.getName()).build();
-        user.setPermission(node);
-        api.getUserManager().saveUser(user);
-         */
+        PrefixNode node = PrefixNode.builder(prefix, 100).withContext(DefaultContextKeys.WORLD_KEY, world.getName()).build();
+        api.getUserManager().modifyUser(player.getUniqueId(), (User user) -> {
+            DataMutateResult result = user.data().add(node);
+        });
     }
     
     
@@ -411,20 +374,12 @@ public class LuckAPI implements API {
     }
     
     public String getPlayerPrefix(OfflinePlayer player, World world) {
-        //TODO make it work
-        /*
-        api.getUserManager().loadUser(player.getUniqueId()).join();
-        User user = api.getUser(player.getUniqueId());
-        String prefix = null;
-        if (user == null) return null;
-        for (Node node : user.getPermissions()) {
-            if (!node.getPermission().startsWith("prefix.")) continue;
-            if (!node.getWorld().toString().startsWith("Optional[" + world.getName() + "]")) continue;
-            prefix = node.getPrefix().getValue();
+        //TODO TEST
+        for(PrefixNode node : api.getUserManager().getUser(player.getUniqueId()).getNodes(NodeType.PREFIX)){
+            if(node.getContexts().contains(DefaultContextKeys.WORLD_KEY, world.getName())){
+                return node.getMetaValue();
+            }
         }
-        return prefix;
-
-         */
         return "null";
     }
     
@@ -441,21 +396,10 @@ public class LuckAPI implements API {
     
     
     public void setPlayerSuffix(OfflinePlayer player, String suffix, World world) {
-        //TODO make it work
-        /*
-        api.getUserManager().loadUser(player.getUniqueId()).join();
-        User user = api.getUser(player.getUniqueId());
-        if (user == null) return;
-        for (Node node :user.getPermissions()) {
-            if (!node.getPermission().startsWith("suffix.")) continue;
-            if (!node.getWorld().toString().startsWith("Optional[" + world.getName() + "]")) continue;
-            user.unsetPermission(node);
-        }
-        Node node = api.getNodeFactory().makeSuffixNode(0, suffix).setWorld(world.getName()).build();
-        user.setPermission(node);
-        api.getUserManager().saveUser(user);
-
-         */
+        SuffixNode node = SuffixNode.builder(suffix, 100).withContext(DefaultContextKeys.WORLD_KEY, world.getName()).build();
+        api.getUserManager().modifyUser(player.getUniqueId(), (User user) -> {
+            DataMutateResult result = user.data().add(node);
+        });
     }
     
     public String getPlayerSuffix(OfflinePlayer player) {
@@ -465,20 +409,12 @@ public class LuckAPI implements API {
     
     
     public String getPlayerSuffix(OfflinePlayer player, World world) {
-        //TODO make it work
-        /*
-        api.getUserManager().loadUser(player.getUniqueId()).join();
-        User user = api.getUser(player.getUniqueId());
-        String suffix = null;
-        if (user == null) return null;
-        for (Node node : user.getPermissions()) {
-            if (!node.getPermission().startsWith("suffix.")) continue;
-            if (!node.getWorld().toString().startsWith("Optional[" + world.getName() + "]")) continue;
-            suffix = node.getSuffix().getValue();
+        //TODO TEST
+        for(SuffixNode node : api.getUserManager().getUser(player.getUniqueId()).getNodes(NodeType.SUFFIX)){
+            if(node.getContexts().contains(DefaultContextKeys.WORLD_KEY, world.getName())){
+                return node.getMetaValue();
+            }
         }
-        return suffix;
-
-         */
         return "null";
     }
     

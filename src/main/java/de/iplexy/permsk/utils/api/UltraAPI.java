@@ -20,7 +20,7 @@ public class UltraAPI implements API {
     //
     private final UltraPermissionsAPI api = UltraPermissions.getAPI();
     
-    public void addPerm(OfflinePlayer player, String permission) { // TODO come back to this
+    public void addPerm(OfflinePlayer player, String permission) { //TODO come back to this
         User user = api.getUsers().uuid(player.getUniqueId()).orElseThrow();
         user.newPermission(permission).create();
     }
