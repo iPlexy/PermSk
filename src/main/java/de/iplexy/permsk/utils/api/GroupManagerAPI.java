@@ -27,7 +27,7 @@ public class GroupManagerAPI implements API{
         final Plugin GMplugin = pluginManager.getPlugin("GroupManager");
 
         if (GMplugin != null && GMplugin.isEnabled()) {
-            groupManager = (GroupManager)GMplugin;
+            groupManager = (GroupManager) GMplugin;
             return true;
         }
         return false;
