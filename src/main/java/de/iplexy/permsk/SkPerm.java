@@ -2,10 +2,12 @@ package de.iplexy.permsk;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
+import de.iplexy.permsk.utils.UpdateChecker;
 import de.iplexy.permsk.utils.api.API;
 import de.iplexy.permsk.utils.api.GroupManagerAPI;
 import net.milkbowl.vault.permission.Permission;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.DrilldownPie;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,13 +15,17 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SkPerm extends JavaPlugin {
 
     private static Permission perms;
     private static API api;
-    private final String prefix = ChatColor.translateAlternateColorCodes('&', "&7[&bPermSk&7] ");
+    private static final String prefix = ChatColor.translateAlternateColorCodes('&', "&7[&bPermSk&7] ");
     private static SkPerm instance;
+
+    public static String PermissionPlugin;
     SkriptAddon addon;
 
     public static API getAPI() {
@@ -38,6 +44,7 @@ public class SkPerm extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        checkUpdate(getDescription().getVersion());
         addon = Skript.registerAddon(this);
         if ((Bukkit.getPluginManager().getPlugin("Skript") != null) && (Skript.isAcceptRegistrations())) {
             try {
@@ -61,14 +68,19 @@ public class SkPerm extends JavaPlugin {
             }
             if (Bukkit.getPluginManager().getPlugin("PermissionsEx") != null) {
                 loadApi("PermissionsEX", "PexAPI");
+                PermissionPlugin = "PermissionsEX";
             } else if (Bukkit.getPluginManager().getPlugin("LuckPerms") != null) {
                 loadApi("LuckPerms", "LuckAPI");
+                PermissionPlugin = "LuckPerms";
             } else if (Bukkit.getPluginManager().getPlugin("UltraPermissions") != null) {
                 loadApi("UltraPermissions", "UltraAPI");
+                PermissionPlugin = "UltraPermissions";
             } else if (GroupManagerAPI.hasGroupManager()) {
                 loadApi("GroupManager", "GroupManagerAPI");
+                PermissionPlugin = "GroupManager";
             }  else {
                 sendConsoleMessage("&7[&ePermPlugin&7]&e No permission plugin found, ignoring PermPlugin syntaxes");
+                PermissionPlugin = "none";
             }
             sendConsoleMessage("&aAdd-on loaded successfully");
         } else {
@@ -79,7 +91,7 @@ public class SkPerm extends JavaPlugin {
         loadStats();
     }
 
-    private void sendConsoleMessage(String message) {
+    public static void sendConsoleMessage(String message) {
         Bukkit.getConsoleSender().sendMessage(prefix + ChatColor.translateAlternateColorCodes('&', message));
     }
 
@@ -113,6 +125,13 @@ public class SkPerm extends JavaPlugin {
     private void loadStats() {
         Metrics metrics = new Metrics(this, 16435);
         metrics.addCustomChart(new SimplePie("skript_version", () -> Skript.getVersion().toString()));
+        metrics.addCustomChart(new DrilldownPie("permission_plugin", () -> {
+            Map<String, Map<String, Integer>> map = new HashMap<>();
+            Map<String, Integer> entry = new HashMap<>();
+            entry.put(PermissionPlugin, 1);
+            map.put(PermissionPlugin, entry);
+            return map;
+        }));
         sendConsoleMessage("§7[§bbStats§7] Sucessfully loaded");
     }
 
@@ -120,4 +139,11 @@ public class SkPerm extends JavaPlugin {
         return instance;
     }
 
+    private void checkUpdate(String version) {
+        if (true) {
+            UpdateChecker.checkForUpdate(version);
+        } else {
+            sendConsoleMessage("Update checker disabled... will not check for update!");
+        }
+    }
 }
