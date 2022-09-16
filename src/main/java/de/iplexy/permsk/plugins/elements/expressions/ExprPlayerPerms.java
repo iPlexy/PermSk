@@ -37,8 +37,8 @@ public class ExprPlayerPerms extends SimpleExpression<String> {
     
     static {
         Skript.registerExpression(ExprPlayerPerms.class, String.class, ExpressionType.PROPERTY,
-            "[all] perm[ission][s] of [player] %offlineplayer% [in [world] %-world%] [for %-timespan%]",
-            "%offlineplayer%'s perm[ission][s] [in [world] %-world%] [for %-timespan%]");
+            "[PermSk] [all] perm[ission][s] of [player] %offlineplayer% [in [world] %-world%] [for %-timespan%]",
+            "[PermSk] %offlineplayer%'s perm[ission][s] [in [world] %-world%] [for %-timespan%]");
     }
     
     private final API api = SkPerm.getAPI();

@@ -30,7 +30,7 @@ public class ExprGroupMembers extends SimpleExpression<OfflinePlayer> {
     
     static {
         Skript.registerExpression(ExprGroupMembers.class, OfflinePlayer.class, ExpressionType.PROPERTY,
-            "[members of] group %string% [in [world] %-world%] [for %-timespan%])");
+            "[PermSk] [members of] group %string% [in [world] %-world%] [for %-timespan%])");
     }
     
     private final API api = SkPerm.getAPI();
