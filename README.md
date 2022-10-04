@@ -15,6 +15,6 @@ Supported Permission Plugins are:
   - LuckPerms (recommended)
   - PermissionsEx
   - UltimatePermissions
-  - GroupManager (SOON)
+  - GroupManager
 
 [![SkriptHubViewTheDocs](http://skripthub.net/static/addon/ViewTheDocsButton.png)](http://skripthub.net/docs/?addon=PermSk)
