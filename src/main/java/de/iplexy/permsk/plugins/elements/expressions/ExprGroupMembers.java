@@ -15,6 +15,7 @@ import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import de.iplexy.permsk.SkPerm;
 import de.iplexy.permsk.utils.api.API;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.event.Event;
@@ -30,7 +31,7 @@ public class ExprGroupMembers extends SimpleExpression<OfflinePlayer> {
     
     static {
         Skript.registerExpression(ExprGroupMembers.class, OfflinePlayer.class, ExpressionType.PROPERTY,
-            "[PermSk] [members of] group %string% [in [world] %-world%] [for %-timespan%])");
+            "[members of] group %string% [in [world] %-world%] [for %-timespan%])");
     }
     
     private final API api = SkPerm.getAPI();

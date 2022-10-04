@@ -346,5 +346,9 @@ public interface API {
     String getPlayerSuffix(OfflinePlayer player);
     
     String getPlayerSuffix(OfflinePlayer player, World world);
+
+    String getPrimaryGroup(OfflinePlayer player);
+
+    void setPrimaryGroup(OfflinePlayer player, String group);
     
 }

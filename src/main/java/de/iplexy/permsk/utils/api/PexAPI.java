@@ -216,5 +216,16 @@ public class PexAPI implements API {
     public String getPlayerSuffix(OfflinePlayer player, World world) {
         return api.getUser(player.getUniqueId()).getSuffix(world.getName());
     }
-    
+
+    @Override
+    public String getPrimaryGroup(OfflinePlayer player) {
+        return api.getUser(player.getUniqueId()).getParentIdentifiers().get(0);
+    }
+
+
+    @Override
+    public void setPrimaryGroup(OfflinePlayer player, String group) {
+        addPlayerToGroup(player,group);
+    }
+
 }

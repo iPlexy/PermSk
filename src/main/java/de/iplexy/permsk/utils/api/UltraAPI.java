@@ -319,5 +319,17 @@ public class UltraAPI implements API {
         return user.getSuffix().orElse("");
         // Does not support worlds
     }
-    
+
+    @Override
+    public String getPrimaryGroup(OfflinePlayer player) {
+        //TODO ADD FUNCTION
+        return null;
+    }
+
+
+    @Override
+    public void setPrimaryGroup(OfflinePlayer player, String group) {
+        //TODO ADD FUNCTION
+    }
+
 }

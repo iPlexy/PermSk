@@ -422,9 +422,15 @@ public class LuckAPI implements API {
         User user = api.getUserManager().getUser(p.getUniqueId());
         return user.getPrimaryGroup();
     }
-    
 
-    
+
+    @Override
+    public void setPrimaryGroup(OfflinePlayer player, String group) {
+        User user = api.getUserManager().getUser(player.getUniqueId());
+        user.setPrimaryGroup(group);
+    }
+
+
     public int getWeight(String g) {
         return api.getGroupManager().getGroup(g).getWeight().orElse(-1);
     }

@@ -6,6 +6,7 @@ import org.anjocaido.groupmanager.data.Group;
 import org.anjocaido.groupmanager.data.User;
 import org.anjocaido.groupmanager.dataholder.OverloadedWorldHolder;
 import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
@@ -145,6 +146,7 @@ public class GroupManagerAPI implements API{
 
     @Override
     public String[] getPerm(String group) {
+        //TODO Make more efficient
         final OverloadedWorldHolder handler = groupManager.getWorldsHolder().getDefaultWorld();
         Group group1 = handler.getGroup(group);
         return group1.getPermissionList().toArray(new String[0]);
@@ -166,9 +168,10 @@ public class GroupManagerAPI implements API{
     @Override
     public void createGroup(String group, String[] parents) {
         final OverloadedWorldHolder handler = groupManager.getWorldsHolder().getDefaultWorld();
-        Group group1 = handler.getGroup(group);
+        Group group1 = handler.createGroup(group);
         for(String parent : parents){
-            group1.addInherits(handler.getGroup(parent));
+            if(handler.groupExists(parent))
+                group1.addInherits(handler.getGroup(parent));
         }
     }
 
@@ -370,5 +373,17 @@ public class GroupManagerAPI implements API{
     public String getPlayerSuffix(OfflinePlayer player, World world) {
         final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(world.getName());
         return handler.getUserPrefix(player.getName());
+    }
+
+    @Override
+    public String getPrimaryGroup(OfflinePlayer player) {
+        //TODO ADD FUNCTION
+        return null;
+    }
+
+
+    @Override
+    public void setPrimaryGroup(OfflinePlayer player, String group) {
+
     }
 }
