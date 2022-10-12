@@ -12,8 +12,11 @@ import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
+import java.lang.reflect.Array;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GroupManagerAPI implements API{
 
@@ -385,5 +388,14 @@ public class GroupManagerAPI implements API{
     @Override
     public void setPrimaryGroup(OfflinePlayer player, String group) {
 
+    }
+
+    @Override
+    public ArrayList<String> getInheritedGroups(OfflinePlayer player) {
+        //Todo Test
+        String uuid = player.getUniqueId().toString();
+        final OverloadedWorldHolder handler = groupManager.getWorldsHolder().getDefaultWorld();
+        User user = handler.getUser(uuid);
+        return user.subGroupListStringCopy();
     }
 }

@@ -5,6 +5,7 @@ import me.TechsCode.UltraPermissions.UltraPermissionsAPI;
 import me.TechsCode.UltraPermissions.storage.objects.Group;
 import me.TechsCode.UltraPermissions.storage.objects.Permission;
 import me.TechsCode.UltraPermissions.storage.objects.User;
+import me.TechsCode.base.storage.Stored;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -12,6 +13,7 @@ import org.bukkit.World;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UltraAPI implements API {
     
@@ -330,6 +332,17 @@ public class UltraAPI implements API {
     @Override
     public void setPrimaryGroup(OfflinePlayer player, String group) {
         //TODO ADD FUNCTION
+    }
+
+    @Override
+    public ArrayList<String> getInheritedGroups(OfflinePlayer player) {
+        //TODO Test
+        User user = api.getUsers().uuid(player.getUniqueId()).orElseThrow();
+        ArrayList<String> groups = new ArrayList<>();
+        for(Stored<Group> group : user.getGroups()){
+            groups.add(group.get().orElseThrow().getName());
+        }
+        return groups;
     }
 
 }

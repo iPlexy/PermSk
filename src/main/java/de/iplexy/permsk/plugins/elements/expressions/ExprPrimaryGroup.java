@@ -10,7 +10,6 @@ import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import de.iplexy.permsk.SkPerm;
 import de.iplexy.permsk.utils.api.API;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -22,7 +21,7 @@ public class ExprPrimaryGroup extends SimpleExpression<String> {
 
     static {
         Skript.registerExpression(ExprPrimaryGroup.class, String.class, ExpressionType.COMBINED,
-                "primary group of %offlineplayer%");
+                "[primary] group of %offlineplayer%");
     }
 
     @Nullable

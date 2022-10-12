@@ -3,6 +3,9 @@ package de.iplexy.permsk.utils.api;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * An interface to allow multiple permission plugins to use the same syntaxes via Skript
  */
@@ -350,5 +353,7 @@ public interface API {
     String getPrimaryGroup(OfflinePlayer player);
 
     void setPrimaryGroup(OfflinePlayer player, String group);
+
+    ArrayList<String> getInheritedGroups(OfflinePlayer player);
     
 }

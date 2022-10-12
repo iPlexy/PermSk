@@ -27,8 +27,9 @@ public class LuckAPI implements API {
     
     private final LuckPerms api = LuckPermsProvider.get();
     
-    public List<String> getInheritedGroups(OfflinePlayer p) {
-        List<String> groups = new ArrayList<>();
+    public ArrayList<String> getInheritedGroups(OfflinePlayer p) {
+        //TODO Test
+        ArrayList<String> groups = new ArrayList<>();
         User user = api.getUserManager().getUser(p.getUniqueId());
         assert user != null;
         for (Group g : user.getInheritedGroups(QueryOptions.builder(QueryMode.CONTEXTUAL).build())) {

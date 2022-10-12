@@ -228,4 +228,14 @@ public class PexAPI implements API {
         addPlayerToGroup(player,group);
     }
 
+    @Override
+    public ArrayList<String> getInheritedGroups(OfflinePlayer player) {
+        //Todo Test
+        ArrayList<String> groups = new ArrayList<>();
+        for(String group : api.getUser(player.getUniqueId()).getAllParents().keySet()){
+            groups.add(group);
+        }
+        return groups;
+    }
+
 }
