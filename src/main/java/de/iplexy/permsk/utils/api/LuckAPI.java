@@ -1,5 +1,6 @@
 package de.iplexy.permsk.utils.api;
 
+import lombok.SneakyThrows;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.cacheddata.CachedPermissionData;
@@ -22,27 +23,30 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 public class LuckAPI implements API {
-    
+
     private final LuckPerms api = LuckPermsProvider.get();
-    
+
     public ArrayList<String> getInheritedGroups(OfflinePlayer p) {
         //TODO Test
         ArrayList<String> groups = new ArrayList<>();
-        User user = api.getUserManager().getUser(p.getUniqueId());
+        User user = getUser(p);
         assert user != null;
         for (Group g : user.getInheritedGroups(QueryOptions.builder(QueryMode.CONTEXTUAL).build())) {
             groups.add(g.getName());
         }
         return groups;
-    }    public void addPerm(OfflinePlayer player, String permission) {
+    }
+
+    public void addPerm(OfflinePlayer player, String permission) {
         Node node = Node.builder(permission).build();
         api.getUserManager().modifyUser(player.getUniqueId(), (User user) -> {
             DataMutateResult result = user.data().add(node);
         });
     }
-    
+
     public void addPerm(OfflinePlayer player, String permission, World world) {
         ImmutableContextSet set = ImmutableContextSet.of("world", world.getName());
         Node node = Node.builder(permission).withContext(set).build();
@@ -50,7 +54,7 @@ public class LuckAPI implements API {
             DataMutateResult result = user.data().add(node);
         });
     }
-    
+
     public void addPerm(OfflinePlayer player, String permission, World world, int seconds) {
         ImmutableContextSet set = ImmutableContextSet.of("world", world.getName());
         Node node = Node.builder(permission).expiry(seconds).withContext(set).build();
@@ -58,21 +62,21 @@ public class LuckAPI implements API {
             DataMutateResult result = user.data().add(node);
         });
     }
-    
+
     public void addPerm(OfflinePlayer player, String permission, int seconds) {
         Node node = Node.builder(permission).expiry(seconds).build();
         api.getUserManager().modifyUser(player.getUniqueId(), (User user) -> {
             DataMutateResult result = user.data().add(node);
         });
     }
-    
+
     public void addPerm(String group, String permission) {
         Node node = Node.builder(permission).build();
         api.getGroupManager().modifyGroup(group, (Group theGroup) -> {
             DataMutateResult result = theGroup.data().add(node);
         });
     }
-    
+
     public void addPerm(String group, String permission, World world) {
         ImmutableContextSet set = ImmutableContextSet.of("world", world.getName());
         Node node = Node.builder(permission).withContext(set).build();
@@ -80,7 +84,7 @@ public class LuckAPI implements API {
             DataMutateResult result = theGroup.data().add(node);
         });
     }
-    
+
     public void addPerm(String group, String permission, World world, int seconds) {
         ImmutableContextSet set = ImmutableContextSet.of("world", world.getName());
         Node node = Node.builder(permission).expiry(seconds).withContext(set).build();
@@ -88,14 +92,14 @@ public class LuckAPI implements API {
             DataMutateResult result = theGroup.data().add(node);
         });
     }
-    
+
     public void addPerm(String group, String permission, int seconds) {
         Node node = Node.builder(permission).expiry(seconds).build();
         api.getGroupManager().modifyGroup(group, (Group theGroup) -> {
             DataMutateResult result = theGroup.data().add(node);
         });
     }
-    
+
     public void removePerm(OfflinePlayer player, String permission) {
         Node node = Node.builder(permission).build();
         api.getUserManager().modifyUser(player.getUniqueId(), (User user) -> {
@@ -106,7 +110,7 @@ public class LuckAPI implements API {
             }
         });
     }
-    
+
     public void removePerm(OfflinePlayer player, String permission, World world) {
         Node node = Node.builder(permission).withContext("world", world.getName()).build();
         api.getUserManager().modifyUser(player.getUniqueId(), (User user) -> {
@@ -117,7 +121,7 @@ public class LuckAPI implements API {
             }
         });
     }
-    
+
     public void removePerm(String group, String permission) {
         Node node = Node.builder(permission).build();
         api.getGroupManager().modifyGroup(group, (Group groupB) -> {
@@ -128,7 +132,7 @@ public class LuckAPI implements API {
             }
         });
     }
-    
+
     public void removePerm(String group, String permission, World world) {
         Node node = Node.builder(permission).withContext("world", world.getName()).build();
         api.getGroupManager().modifyGroup(group, (Group groupB) -> {
@@ -139,10 +143,10 @@ public class LuckAPI implements API {
             }
         });
     }
-    
+
     public String[] getPerm(OfflinePlayer player) {
         ArrayList<String> perms = new ArrayList<>();
-        User user = api.getUserManager().loadUser(player.getUniqueId()).join();
+        User user = getUser(player);
         CachedPermissionData permissionData = user.getCachedData().getPermissionData();
         for (String perm : permissionData.getPermissionMap().keySet()) {
             PermissionNode node = PermissionNode.builder(perm).build();
@@ -154,10 +158,10 @@ public class LuckAPI implements API {
         }
         return perms.toArray(new String[0]);
     }
-    
+
     public String[] getPerm(OfflinePlayer player, World world) {
         ArrayList<String> perms = new ArrayList<>();
-        User user = api.getUserManager().loadUser(player.getUniqueId()).join();
+        User user = getUser(player);
         for (String perm : user.getCachedData().getPermissionData().getPermissionMap().keySet()) {
             Node node = PermissionNode.builder(perm).build();
             if (node.getContexts().contains("world", world.getName())) {
@@ -166,7 +170,7 @@ public class LuckAPI implements API {
         }
         return perms.toArray(new String[0]);
     }
-    
+
     public String[] getPerm(String group) {
         ArrayList<String> perms = new ArrayList<>();
         Group group1 = api.getGroupManager().getGroup(group);
@@ -181,7 +185,7 @@ public class LuckAPI implements API {
         }
         return perms.toArray(new String[0]);
     }
-    
+
     public String[] getPerm(String group, World world) {
         ArrayList<String> perms = new ArrayList<>();
         Group group1 = api.getGroupManager().getGroup(group);
@@ -193,52 +197,52 @@ public class LuckAPI implements API {
         }
         return perms.toArray(new String[0]);
     }
-    
+
     public void createGroup(String group) {
         api.getGroupManager().createAndLoadGroup(group);
     }
-    
+
     public void createGroup(String group, String[] parents) {
         api.getGroupManager().createAndLoadGroup(group);
         Group groupT = api.getGroupManager().getGroup(group);
-        
+
         if (groupT == null) return;
         Node node;
         for (String parent : parents) {
             addPerm(group, "group." + parent);
         }
     }
-    
+
     public void removeGroup(String group) {
         Group groupT = api.getGroupManager().getGroup(group);
         if (groupT != null)
             api.getGroupManager().deleteGroup(groupT);
     }
-    
+
     public void addPlayerToGroup(OfflinePlayer player, String group) {
         addPerm(player, "group." + group);
     }
-    
+
     public void addPlayerToGroup(OfflinePlayer player, String group, World world) {
         addPerm(player, "group." + group, world);
     }
-    
+
     public void addPlayerToGroup(OfflinePlayer player, String group, World world, int seconds) {
         addPerm(player, "group." + group, world, seconds);
     }
-    
+
     public void addPlayerToGroup(OfflinePlayer player, String group, int seconds) {
         addPerm(player, "group." + group, seconds);
     }
-    
+
     public void removePlayerFromGroup(OfflinePlayer player, String group) {
         removePerm(player, "group." + group);
     }
-    
+
     public void removePlayerFromGroup(OfflinePlayer player, String group, World world) {
         removePerm(player, "group." + group, world);
     }
-    
+
     public OfflinePlayer[] getPlayersInGroup(String group) {
         ArrayList<OfflinePlayer> list = new ArrayList<>();
         Group group1 = api.getGroupManager().getGroup(group);
@@ -251,7 +255,7 @@ public class LuckAPI implements API {
         });
         return list.toArray(new OfflinePlayer[0]);
     }
-    
+
     public void setGroupWeight(String group, int weight) {
         Group groupT = api.getGroupManager().getGroup(group);
         if (groupT == null) return;
@@ -262,11 +266,11 @@ public class LuckAPI implements API {
         }
         addPerm(group, "weight." + weight);
     }
-    
+
     public void setGroupRank(String group, int rank) {
         // Not supported in luck perms
     }
-    
+
     public int getGroupWeight(String group) {
         Group groupT = api.getGroupManager().getGroup(group);
         if (groupT == null) return 0;
@@ -275,83 +279,83 @@ public class LuckAPI implements API {
         }
         return 0;
     }
-    
+
     public int getGroupRank(String group) {
         return 0;
         // Not supported in LuckPerms
     }
-    
+
     public void setGroupPrefix(String group, String prefix) {
         Group groupT = api.getGroupManager().getGroup(group);
         if (groupT == null) return;
         for (String perm : api.getGroupManager().getGroup(group).getCachedData().getPermissionData().getPermissionMap()
-            .keySet()) {
+                .keySet()) {
             if (perm.startsWith("prefix."))
                 removePerm(group, perm);
         }
         addPerm(group, "prefix." + getWeight(group) + "." + prefix);
     }
-    
+
     public void setGroupPrefix(String group, String prefix, World world) {
         PrefixNode node = PrefixNode.builder(prefix, getGroupWeight(group)).withContext(DefaultContextKeys.WORLD_KEY, world.getName()).build();
         api.getGroupManager().modifyGroup(group, (Group theGroup) -> {
             DataMutateResult result = theGroup.data().add(node);
         });
     }
-    
+
     public String getGroupPrefix(String group) {
         Group groupT = api.getGroupManager().getGroup(group);
         return groupT.getCachedData().getMetaData().getPrefix();
     }
-    
+
     public String getGroupPrefix(String group, World world) {
         //TODO TEST
-        for(PrefixNode node : api.getGroupManager().getGroup(group).getNodes(NodeType.PREFIX)){
-            if(node.getContexts().contains(DefaultContextKeys.WORLD_KEY, world.getName())){
+        for (PrefixNode node : api.getGroupManager().getGroup(group).getNodes(NodeType.PREFIX)) {
+            if (node.getContexts().contains(DefaultContextKeys.WORLD_KEY, world.getName())) {
                 return node.getMetaValue();
             }
         }
         return "null";
     }
-    
-    
+
+
     public void setGroupSuffix(String group, String suffix) {
         Group groupT = api.getGroupManager().getGroup(group);
         if (groupT == null) return;
         for (String perm : api.getGroupManager().getGroup(group).getCachedData().getPermissionData().getPermissionMap()
-            .keySet()) {
+                .keySet()) {
             if (perm.startsWith("suffix."))
                 removePerm(group, perm);
         }
         addPerm(group, "prefix." + getWeight(group) + "." + suffix);
     }
-    
+
     public void setGroupSuffix(String group, String suffix, World world) {
         SuffixNode node = SuffixNode.builder(suffix, getGroupWeight(group)).withContext(DefaultContextKeys.WORLD_KEY, world.getName()).build();
         api.getGroupManager().modifyGroup(group, (Group theGroup) -> {
             DataMutateResult result = theGroup.data().add(node);
         });
     }
-    
-    
+
+
     public String getGroupSuffix(String group) {
         Group groupT = api.getGroupManager().getGroup(group);
         return groupT.getCachedData().getMetaData().getSuffix();
     }
-    
+
     public String getGroupSuffix(String group, World world) {
         //TODO TEST
-        for(SuffixNode node : api.getGroupManager().getGroup(group).getNodes(NodeType.SUFFIX)){
-            if(node.getContexts().contains(DefaultContextKeys.WORLD_KEY, world.getName())){
+        for (SuffixNode node : api.getGroupManager().getGroup(group).getNodes(NodeType.SUFFIX)) {
+            if (node.getContexts().contains(DefaultContextKeys.WORLD_KEY, world.getName())) {
                 return node.getMetaValue();
             }
         }
         return "null";
     }
-    
-    
+
+
     public void setPlayerPrefix(OfflinePlayer player, String prefix) {
-        User user = api.getUserManager().getUser(player.getUniqueId());
+        User user = getUser(player);
         if (user == null) return;
         for (String perm : user.getCachedData().getPermissionData().getPermissionMap().keySet()) {
             if (perm.startsWith("prefix."))
@@ -359,32 +363,33 @@ public class LuckAPI implements API {
         }
         addPerm(player, "prefix." + getWeight(getPrimaryGroup(player)) + "." + prefix);
     }
-    
-    
+
+
     public void setPlayerPrefix(OfflinePlayer player, String prefix, World world) {
         PrefixNode node = PrefixNode.builder(prefix, 100).withContext(DefaultContextKeys.WORLD_KEY, world.getName()).build();
         api.getUserManager().modifyUser(player.getUniqueId(), (User user) -> {
             DataMutateResult result = user.data().add(node);
         });
     }
-    
-    
+
+
+    @SneakyThrows
     public String getPlayerPrefix(OfflinePlayer player) {
-        User user = api.getUserManager().getUser(player.getUniqueId());
+        User user = getUser(player);
         return user.getCachedData().getMetaData().getPrefix();
     }
-    
+
     public String getPlayerPrefix(OfflinePlayer player, World world) {
         //TODO TEST
-        for(PrefixNode node : api.getUserManager().getUser(player.getUniqueId()).getNodes(NodeType.PREFIX)){
-            if(node.getContexts().contains(DefaultContextKeys.WORLD_KEY, world.getName())){
+        for (PrefixNode node : api.getUserManager().getUser(player.getUniqueId()).getNodes(NodeType.PREFIX)) {
+            if (node.getContexts().contains(DefaultContextKeys.WORLD_KEY, world.getName())) {
                 return node.getMetaValue();
             }
         }
         return "null";
     }
-    
-    
+
+
     public void setPlayerSuffix(OfflinePlayer player, String suffix) {
         User user = api.getUserManager().getUser(player.getUniqueId());
         if (user == null) return;
@@ -394,40 +399,40 @@ public class LuckAPI implements API {
         }
         addPerm(player, "suffix." + getWeight(getPrimaryGroup(player)) + "." + suffix);
     }
-    
-    
+
+
     public void setPlayerSuffix(OfflinePlayer player, String suffix, World world) {
         SuffixNode node = SuffixNode.builder(suffix, 100).withContext(DefaultContextKeys.WORLD_KEY, world.getName()).build();
         api.getUserManager().modifyUser(player.getUniqueId(), (User user) -> {
             DataMutateResult result = user.data().add(node);
         });
     }
-    
+
     public String getPlayerSuffix(OfflinePlayer player) {
-        User user = api.getUserManager().getUser(player.getUniqueId());
+        User user = getUser(player);
         return user.getCachedData().getMetaData().getSuffix();
     }
-    
-    
+
+
     public String getPlayerSuffix(OfflinePlayer player, World world) {
         //TODO TEST
-        for(SuffixNode node : api.getUserManager().getUser(player.getUniqueId()).getNodes(NodeType.SUFFIX)){
-            if(node.getContexts().contains(DefaultContextKeys.WORLD_KEY, world.getName())){
+        for (SuffixNode node : getUser(player).getNodes(NodeType.SUFFIX)) {
+            if (node.getContexts().contains(DefaultContextKeys.WORLD_KEY, world.getName())) {
                 return node.getMetaValue();
             }
         }
         return "null";
     }
-    
+
     public String getPrimaryGroup(OfflinePlayer p) {
-        User user = api.getUserManager().getUser(p.getUniqueId());
+        User user = getUser(p);
         return user.getPrimaryGroup();
     }
 
 
     @Override
     public void setPrimaryGroup(OfflinePlayer player, String group) {
-        User user = api.getUserManager().getUser(player.getUniqueId());
+        User user = getUser(player);
         user.setPrimaryGroup(group);
     }
 
@@ -435,4 +440,17 @@ public class LuckAPI implements API {
     public int getWeight(String g) {
         return api.getGroupManager().getGroup(g).getWeight().orElse(-1);
     }
+
+    private User getUser(OfflinePlayer player) {
+        if (api.getUserManager().isLoaded(player.getUniqueId())){
+            return api.getUserManager().getUser(player.getUniqueId());
+        }else{
+            try {
+                return api.getUserManager().loadUser(player.getUniqueId()).get();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
 }
