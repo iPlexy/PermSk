@@ -11,6 +11,7 @@ import static de.iplexy.permsk.SkPerm.PermissionPlugin;
 import static de.iplexy.permsk.SkPerm.prefix;
 
 public class PermSkCommand implements CommandExecutor {
+    //TODO Finish command
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(args.length>0){

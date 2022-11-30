@@ -44,6 +44,7 @@ public class SkPerm extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        //TODO register Command
         instance = this;
         checkUpdate(getDescription().getVersion());
         addon = Skript.registerAddon(this);
