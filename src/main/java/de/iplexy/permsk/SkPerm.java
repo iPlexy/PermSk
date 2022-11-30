@@ -11,6 +11,7 @@ import org.bstats.charts.DrilldownPie;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -22,7 +23,7 @@ public class SkPerm extends JavaPlugin {
 
     private static Permission perms;
     private static API api;
-    private static final String prefix = ChatColor.translateAlternateColorCodes('&', "&7[&bPermSk&7] ");
+    public static final String prefix = ChatColor.translateAlternateColorCodes('&', "&7[&bPermSk&7] ");
     private static SkPerm instance;
 
     public static String PermissionPlugin;

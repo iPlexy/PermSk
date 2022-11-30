@@ -9,3 +9,6 @@ website: https://iplexy.de
 depend:
   - Skript
 softdepend: [Vault, PermissionsEx, LuckPerms, UltraPermissions, GroupManager]
+commands:
+  PermSk:
+      description: "Informations about PermSk"
