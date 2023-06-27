@@ -176,9 +176,9 @@ public class LuckAPI implements API {
         Group group1 = api.getGroupManager().getGroup(group);
         CachedPermissionData permissionData = group1.getCachedData().getPermissionData();
         for (String perm : permissionData.getPermissionMap().keySet()) {
-            PermissionNode node = PermissionNode.builder(perm).build();
-            if (permissionData.getPermissionMap().get(perm)) {
-                if (!perm.startsWith("group.")) {
+            if (!perm.startsWith("group.") && !perm.startsWith("weight.") && !perm.startsWith("prefix.")) {
+                PermissionNode node = PermissionNode.builder(perm).build();
+                if (permissionData.getPermissionMap().get(perm)) {
                     perms.add(perm);
                 }
             }
@@ -246,10 +246,12 @@ public class LuckAPI implements API {
     public OfflinePlayer[] getPlayersInGroup(String group) {
         ArrayList<OfflinePlayer> list = new ArrayList<>();
         Group group1 = api.getGroupManager().getGroup(group);
+        Bukkit.broadcastMessage(group1.getName());
         NodeMatcher<InheritanceNode> matcher = NodeMatcher.key(InheritanceNode.builder(group1).build());
         api.getUserManager().searchAll(matcher).thenAccept((Map<UUID, Collection<InheritanceNode>> map) -> {
             Set<UUID> memberUUIDS = map.keySet();
             for (UUID uuid : memberUUIDS) {
+                Bukkit.broadcastMessage(uuid.toString());
                 list.add(Bukkit.getOfflinePlayer(uuid));
             }
         });
