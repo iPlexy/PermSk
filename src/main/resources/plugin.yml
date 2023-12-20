@@ -1,7 +1,7 @@
-main: de.iplexy.permsk.SkPerm
+main: de.iplexy.permsk.PermSk
 name: PermSk
-version: 1.1.1
-api-version: 1.19
+version: 2.0
+api-version: 1.20
 authors:
   - ShaneBee
   - iPlexy
