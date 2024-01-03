@@ -19,6 +19,7 @@ public class EffReloadConfig extends Effect {
     static {
         Skript.registerEffect(EffReloadConfig.class, "[permsk] reload pex [config]");
     }
+
     @Override
     protected void execute(Event event) {
         //Todo: Implement with pex

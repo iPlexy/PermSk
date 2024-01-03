@@ -20,6 +20,11 @@ import java.util.function.Consumer;
 public class UpdateChecker implements Listener {
 
     private static String UPDATE_VERSION;
+    private final PermSk plugin;
+
+    public UpdateChecker(PermSk plugin) {
+        this.plugin = plugin;
+    }
 
     public static void checkForUpdate(String pluginVersion) {
         PermSk.sendConsoleMessage("Checking for update...");
@@ -28,8 +33,8 @@ public class UpdateChecker implements Listener {
                 PermSk.sendConsoleMessage("<green>Plugin is up to date!");
             } else {
                 PermSk.sendConsoleMessage("<red>Plugin is not up to date!");
-                PermSk.sendConsoleMessage(" - Current version: <red>v"+ pluginVersion);
-                PermSk.sendConsoleMessage(" - Available update: <green>v"+ version);
+                PermSk.sendConsoleMessage(" - Current version: <red>v" + pluginVersion);
+                PermSk.sendConsoleMessage(" - Available update: <green>v" + version);
                 PermSk.sendConsoleMessage(" - Download available at: https://github.com/iPlexy/PermSk/releases");
                 UPDATE_VERSION = version;
             }
@@ -48,12 +53,6 @@ public class UpdateChecker implements Listener {
         }
     }
 
-    private final PermSk plugin;
-
-    public UpdateChecker(PermSk plugin) {
-        this.plugin = plugin;
-    }
-
     @EventHandler
     private void onJoin(PlayerJoinEvent event) {
         if (UPDATE_VERSION == null) return;
@@ -62,8 +61,8 @@ public class UpdateChecker implements Listener {
         if (!player.hasPermission("permsk.update.check")) return;
 
         Bukkit.getScheduler().runTaskLater(plugin, bukkitTask -> {
-            player.sendMessage(Component.text(ChatColor.translateAlternateColorCodes('&',"&7[&bPerm&3Sk&7] Update available: &a" + UPDATE_VERSION)));
-            player.sendMessage(Component.text(ChatColor.translateAlternateColorCodes('&',"&7[&bPerm&3Sk&7] Download at &bhttps://github.com/iPlexy/PermSk/releases")));
+            player.sendMessage(Component.text(ChatColor.translateAlternateColorCodes('&', "&7[&bPerm&3Sk&7] Update available: &a" + UPDATE_VERSION)));
+            player.sendMessage(Component.text(ChatColor.translateAlternateColorCodes('&', "&7[&bPerm&3Sk&7] Download at &bhttps://github.com/iPlexy/PermSk/releases")));
         }, 60);
     }
 

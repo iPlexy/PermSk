@@ -8,24 +8,17 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
-import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
-import ch.njol.util.coll.CollectionUtils;
 import de.iplexy.permsk.PermSk;
 import de.iplexy.permsk.api.PermissionApi;
-import org.bukkit.World;
 import org.bukkit.event.Event;
-
-import java.util.Arrays;
 
 @Name("Inherited Groups of Group")
 @Since("2.0.0-pre1")
 public class ExprGroupInheritedGroups extends SimpleExpression<String> {
 
     static {
-        Skript.registerExpression(ExprGroupInheritedGroups.class, String.class, ExpressionType.PROPERTY,
-                "[permsk] [all] [group] inheritances of group %string%",
-                "[permsk] group %string%'s [group] inheritances");
+        Skript.registerExpression(ExprGroupInheritedGroups.class, String.class, ExpressionType.PROPERTY, "[permsk] [all] [group] inheritances of group %string%", "[permsk] group %string%'s [group] inheritances");
     }
 
     private final PermissionApi api = PermSk.getPermissionApi();
@@ -50,7 +43,6 @@ public class ExprGroupInheritedGroups extends SimpleExpression<String> {
 
     @Override
     public void change(Event e, Object[] delta, Changer.ChangeMode mode) {
-        return;
     }
 
     @Override

@@ -51,12 +51,12 @@ public class PermSk extends JavaPlugin {
     private void loadDependencies() {
         if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
             sendConsoleMessage("<gold>Vault not found, ignoring syntaxes</gold>");
-        }else{
+        } else {
             sendConsoleMessage("<green>Loaded dependency: Vault</green>");
         }
 
-        for(PermissionPlugin plugin : PermissionPlugin.values()){
-            if(Bukkit.getPluginManager().getPlugin(plugin.getName()) != null){
+        for (PermissionPlugin plugin : PermissionPlugin.values()) {
+            if (Bukkit.getPluginManager().getPlugin(plugin.getName()) != null) {
                 loadApi(plugin.getName(), plugin.getApiClass());
                 break;
             }
@@ -65,7 +65,7 @@ public class PermSk extends JavaPlugin {
 
     private void loadApi(String permPlugin, String apiClass) {
         try {
-            addon.loadClasses("de.iplexy.permsk","elements");
+            addon.loadClasses("de.iplexy.permsk", "elements");
             permissionApi = (PermissionApi) Class.forName("de.iplexy.permsk.api." + apiClass).getConstructor().newInstance();
             permissionPlugin = permPlugin;
             sendConsoleMessage("<green>Loaded dependency: " + permPlugin + "</green>");

@@ -18,7 +18,7 @@ import org.bukkit.event.Event;
 
 @Name("Suffix of Player")
 @Since("2.0.0-pre1")
-public class ExprPlayerSuffix  extends SimpleExpression<String> {
+public class ExprPlayerSuffix extends SimpleExpression<String> {
 
     static {
         Skript.registerExpression(ExprPlayerPrefix.class, String.class, ExpressionType.PROPERTY,
