@@ -443,4 +443,12 @@ public interface PermissionApi {
      */
     String getPrimaryGroup(OfflinePlayer player);
 
+    /**
+     * Sets the primary group of a player
+     *
+     * @param player The player to get the expiry date from
+     * @param group The group to set as primary group
+     */
+    void setPrimaryGroup(OfflinePlayer player, String group);
+
 }

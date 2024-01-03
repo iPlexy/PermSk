@@ -387,9 +387,16 @@ public class LuckApi implements PermissionApi {
         return user.getPrimaryGroup();
     }
 
+    @Override
+    public void setPrimaryGroup(OfflinePlayer player, String group) {
+        User user = getUser(player);
+        user.setPrimaryGroup(group);
+    }
+
     private User getUser(OfflinePlayer player) {
         return api.getUserManager().isLoaded(player.getUniqueId()) ?
                 api.getUserManager().getUser(player.getUniqueId()) :
                 api.getUserManager().loadUser(player.getUniqueId()).join();
     }
+
 }
