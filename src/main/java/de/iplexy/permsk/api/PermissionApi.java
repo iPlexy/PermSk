@@ -1,4 +1,4 @@
-package de.iplexy.permsk.permissionApi;
+package de.iplexy.permsk.api;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;

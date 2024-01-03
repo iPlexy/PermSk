@@ -2,7 +2,7 @@ package de.iplexy.permsk;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
-import de.iplexy.permsk.permissionApi.PermissionApi;
+import de.iplexy.permsk.api.PermissionApi;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -16,6 +16,8 @@ public class PermSk extends JavaPlugin {
 
     @Getter(AccessLevel.PUBLIC)
     private static PermissionApi permissionApi;
+
+    private static final String[] permissionPlugins = {"LuckPerms", "PermissionsEx", "GroupManager", "UltimatePermissions"};
 
 
     @Getter(AccessLevel.PUBLIC)
@@ -47,20 +49,17 @@ public class PermSk extends JavaPlugin {
             sendConsoleMessage("<green>Loaded dependency: Vault</green>");
         }
 
-        if (Bukkit.getPluginManager().getPlugin("LuckPerms") != null) {
-            loadApi("LuckPerms", "LuckApi");
-        } else if (Bukkit.getPluginManager().getPlugin("PermissionsEx") != null) {
-            loadApi("PermissionsEx", "PexApi");
-        } else if (Bukkit.getPluginManager().getPlugin("GroupManager") != null) {
-            loadApi("GroupManager", "GroupManagerApi");
-        } else if (Bukkit.getPluginManager().getPlugin("UltimatePermisions") != null) {
-            loadApi("UltimatePermisions", "UltimateApi");
+        for(String plugin : permissionPlugins){
+            if(Bukkit.getPluginManager().getPlugin(plugin) != null){
+                loadApi("LuckPerms", "LuckApi");
+                break;
+            }
         }
     }
 
     private void loadApi(String permPlugin, String apiClass) {
         try {
-            permissionApi = (PermissionApi) Class.forName("de.iplexy.permsk.permissionApi." + apiClass).getConstructor().newInstance();
+            permissionApi = (PermissionApi) Class.forName("de.iplexy.permsk.api." + apiClass).getConstructor().newInstance();
             sendConsoleMessage("<green>Loaded dependency: " + permPlugin + "</green>");
         } catch (Exception e) {
             throw new RuntimeException(e);

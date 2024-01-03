@@ -1,4 +1,4 @@
-package de.iplexy.permsk.permissionApi;
+package de.iplexy.permsk.api;
 
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
