@@ -64,6 +64,7 @@ public class ExprGroupSuffix extends SimpleExpression<String> {
         }
     }
 
+
     @Override
     public boolean isSingle() {
         return true;

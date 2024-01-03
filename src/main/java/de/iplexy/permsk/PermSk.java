@@ -40,6 +40,7 @@ public class PermSk extends JavaPlugin {
         sendConsoleMessage("Plugin enabled!");
         BStats.loadStats();
         UpdateChecker.checkForUpdate(this.getPluginMeta().getVersion());
+        registerListener();
     }
 
     @Override
@@ -71,6 +72,10 @@ public class PermSk extends JavaPlugin {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void registerListener() {
+        Bukkit.getPluginManager().registerEvents(new UpdateChecker(this), this);
     }
 
 
