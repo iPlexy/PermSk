@@ -7,6 +7,7 @@ import net.luckperms.api.model.data.DataMutateResult;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.Node;
+import net.luckperms.api.node.NodeType;
 import net.luckperms.api.node.matcher.NodeMatcher;
 import net.luckperms.api.node.types.InheritanceNode;
 import net.luckperms.api.node.types.PermissionNode;
@@ -357,7 +358,12 @@ public class LuckApi implements PermissionApi {
 
     @Override
     public List<String> getInheritedGroups(String groupName) {
-        return null;
+        Group group = api.getGroupManager().getGroup(groupName);
+        return group.resolveInheritedNodes(QueryOptions.nonContextual()).stream()
+                .filter(NodeType.INHERITANCE::matches)
+                .map(NodeType.INHERITANCE::cast)
+                .map(InheritanceNode::getGroupName)
+                .collect(Collectors.toList());
     }
 
     @Override

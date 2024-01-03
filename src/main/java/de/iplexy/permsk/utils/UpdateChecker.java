@@ -62,8 +62,8 @@ public class UpdateChecker implements Listener {
         if (!player.hasPermission("permsk.update.check")) return;
 
         Bukkit.getScheduler().runTaskLater(plugin, bukkitTask -> {
-            player.sendMessage(Component.text(ChatColor.translateAlternateColorCodes('&',"&7[&bPerm&3Sk&7] update available: &a" + UPDATE_VERSION)));
-            player.sendMessage(Component.text(ChatColor.translateAlternateColorCodes('&',"&7[&bPerm&3Sk&7] download at &bhttps://github.com/iPlexy/PermSk/releases")));
+            player.sendMessage(Component.text(ChatColor.translateAlternateColorCodes('&',"&7[&bPerm&3Sk&7] Update available: &a" + UPDATE_VERSION)));
+            player.sendMessage(Component.text(ChatColor.translateAlternateColorCodes('&',"&7[&bPerm&3Sk&7] Download at &bhttps://github.com/iPlexy/PermSk/releases")));
         }, 60);
     }
 
