@@ -2,15 +2,19 @@ package de.iplexy.permsk.api;
 
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.context.DefaultContextKeys;
 import net.luckperms.api.context.ImmutableContextSet;
 import net.luckperms.api.model.data.DataMutateResult;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
+import net.luckperms.api.model.user.UserManager;
 import net.luckperms.api.node.Node;
 import net.luckperms.api.node.NodeType;
 import net.luckperms.api.node.matcher.NodeMatcher;
 import net.luckperms.api.node.types.InheritanceNode;
 import net.luckperms.api.node.types.PermissionNode;
+import net.luckperms.api.node.types.PrefixNode;
+import net.luckperms.api.node.types.SuffixNode;
 import net.luckperms.api.query.QueryMode;
 import net.luckperms.api.query.QueryOptions;
 import org.bukkit.Bukkit;
@@ -203,19 +207,35 @@ public class LuckApi implements PermissionApi {
 
     @Override
     public List<OfflinePlayer> getPlayersInGroup(String groupName) {
-        List<OfflinePlayer> players = new ArrayList<>();
+        LuckPerms api = LuckPermsProvider.get();
         Group group = api.getGroupManager().getGroup(groupName);
-        NodeMatcher<InheritanceNode> matcher = NodeMatcher.key(InheritanceNode.builder(group).build());
-        api.getUserManager().searchAll(matcher).thenAccept((Map<UUID, Collection<InheritanceNode>> map) -> {
-            map.keySet().forEach(uuid -> players.add(Bukkit.getOfflinePlayer(uuid)));
-        });
-        return players;
+        if (group == null) throw new IllegalArgumentException("Group " + groupName + " not found");
+        UserManager userManager = api.getUserManager();
+        List<OfflinePlayer> users = new ArrayList<>();
+        for (UUID uuid : userManager.searchAll(NodeMatcher.key(InheritanceNode.builder(group).build())).join().keySet()) {
+            User user = userManager.isLoaded(uuid) ? userManager.getUser(uuid) : userManager.loadUser(uuid).join();
+            if (user == null) throw new IllegalStateException("Could not load data of " + uuid);
+            users.add(Bukkit.getOfflinePlayer(uuid));
+        }
+        return users;
     }
 
     @Override
     public List<OfflinePlayer> getPlayersInGroup(String groupName, World world) {
-        //TODO: Implement
-        return null;
+        Group group = api.getGroupManager().getGroup(groupName);
+        if (group == null) throw new IllegalArgumentException("Group " + groupName + " not found");
+        UserManager userManager = api.getUserManager();
+        List<OfflinePlayer> users = new ArrayList<>();
+        return userManager.searchAll(NodeMatcher.key(InheritanceNode.builder(group).build()))
+                .join()
+                .keySet()
+                .stream()
+                .map(uuid -> {
+                    User user = userManager.isLoaded(uuid) ? userManager.getUser(uuid) : userManager.loadUser(uuid).join();
+                    return user != null ? Bukkit.getOfflinePlayer(user.getUniqueId()) : null;
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -283,25 +303,40 @@ public class LuckApi implements PermissionApi {
 
     @Override
     public void setGroupPrefix(String groupName, String prefix, World world) {
-        //TODO: Implement
+        PrefixNode node = PrefixNode.builder(prefix, getGroupWeight(groupName)).withContext(DefaultContextKeys.WORLD_KEY, world.getName()).build();
+        api.getGroupManager().modifyGroup(groupName, (Group theGroup) -> {
+            DataMutateResult result = theGroup.data().add(node);
+        });
     }
 
     @Override
     public String getGroupPrefix(String groupName, World world) {
-        //TODO: Implement
-        return null;
+        Group group = api.getGroupManager().getGroup(groupName);
+        return group.getNodes(NodeType.PREFIX)
+                .stream()
+                .filter(node -> node.getContexts().contains(DefaultContextKeys.WORLD_KEY, world.getName()))
+                .findFirst()
+                .map(PrefixNode::getMetaValue)
+                .orElse("null");
     }
 
     @Override
     public void setGroupSuffix(String groupName, String suffix, World world) {
-        //TODO: Implement
-
+        SuffixNode node = SuffixNode.builder(suffix, getGroupWeight(groupName)).withContext(DefaultContextKeys.WORLD_KEY, world.getName()).build();
+        api.getGroupManager().modifyGroup(groupName, (Group theGroup) -> {
+            DataMutateResult result = theGroup.data().add(node);
+        });
     }
 
     @Override
     public String getGroupSuffix(String groupName, World world) {
-        //TODO: Implement
-        return null;
+        Group group = api.getGroupManager().getGroup(groupName);
+        return group.getNodes(NodeType.SUFFIX)
+                .stream()
+                .filter(node -> node.getContexts().contains(DefaultContextKeys.WORLD_KEY, world.getName()))
+                .findFirst()
+                .map(SuffixNode::getMetaValue)
+                .orElse("null");
     }
 
     @Override
@@ -336,24 +371,40 @@ public class LuckApi implements PermissionApi {
 
     @Override
     public void setPlayerPrefix(OfflinePlayer player, String prefix, World world) {
-        //TODO: Implement
+        PrefixNode node = PrefixNode.builder(player.getName(), getGroupWeight(getPrimaryGroup(player))).withContext(DefaultContextKeys.WORLD_KEY, world.getName()).build();
+        api.getUserManager().modifyUser(player.getUniqueId(), (User user) -> {
+            DataMutateResult result = user.data().add(node);
+        });
     }
 
     @Override
     public String getPlayerPrefix(OfflinePlayer player, World world) {
-        //TODO: Implement
-        return null;
+        User user = api.getUserManager().getUser(player.getUniqueId());
+        return user.getNodes(NodeType.PREFIX)
+                .stream()
+                .filter(node -> node.getContexts().contains(DefaultContextKeys.WORLD_KEY, world.getName()))
+                .findFirst()
+                .map(PrefixNode::getMetaValue)
+                .orElse("null");
     }
 
     @Override
     public void setPlayerSuffix(OfflinePlayer player, String suffix, World world) {
-        //TODO: Implement
+        SuffixNode node = SuffixNode.builder(player.getName(), getGroupWeight(getPrimaryGroup(player))).withContext(DefaultContextKeys.WORLD_KEY, world.getName()).build();
+        api.getUserManager().modifyUser(player.getUniqueId(), (User user) -> {
+            DataMutateResult result = user.data().add(node);
+        });
     }
 
     @Override
     public String getPlayerSuffix(OfflinePlayer player, World world) {
-        //TODO: Implement
-        return null;
+        User user = api.getUserManager().getUser(player.getUniqueId());
+        return user.getNodes(NodeType.SUFFIX)
+                .stream()
+                .filter(node -> node.getContexts().contains(DefaultContextKeys.WORLD_KEY, world.getName()))
+                .findFirst()
+                .map(SuffixNode::getMetaValue)
+                .orElse("null");
     }
 
     @Override
