@@ -6,7 +6,7 @@
 
     <groupId>de.iplexy</groupId>
     <artifactId>PermSk</artifactId>
-    <version>2.0.0-pre1</version>
+    <version>2.0.0-pre2</version>
     <packaging>jar</packaging>
 
     <name>PermSk</name>
@@ -57,6 +57,10 @@
             <name>Skript Repository</name>
             <url>https://repo.skriptlang.org/releases</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -89,6 +93,11 @@
             <artifactId>bstats-bukkit</artifactId>
             <version>3.0.2</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ElgarL</groupId>
+            <artifactId>groupmanager</artifactId>
+            <version>3.2</version>
         </dependency>
     </dependencies>
 </project>
