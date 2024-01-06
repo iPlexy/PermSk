@@ -1,5 +1,7 @@
 package de.iplexy.permsk.api;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.context.DefaultContextKeys;
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
 public class LuckApi implements PermissionApi {
 
     private final LuckPerms api = LuckPermsProvider.get();
+    @Getter(AccessLevel.PUBLIC)
     private final ExecutorService executorService = Executors.newCachedThreadPool();
 
     @Override
@@ -646,5 +649,4 @@ public class LuckApi implements PermissionApi {
         }
     }
 
-    //TODO Shutdown threads
 }

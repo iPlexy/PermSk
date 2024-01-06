@@ -2,6 +2,7 @@ package de.iplexy.permsk;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
+import de.iplexy.permsk.api.LuckApi;
 import de.iplexy.permsk.api.PermissionApi;
 import de.iplexy.permsk.enums.PermissionPlugin;
 import de.iplexy.permsk.utils.BStats;
@@ -45,6 +46,8 @@ public class PermSk extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (getPermissionApi() instanceof LuckApi)
+            ((LuckApi) getPermissionApi()).getExecutorService().shutdown();
         sendConsoleMessage("Plugin disabled!");
     }
 
