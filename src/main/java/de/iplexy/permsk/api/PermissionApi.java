@@ -451,4 +451,12 @@ public interface PermissionApi {
      */
     void setPrimaryGroup(OfflinePlayer player, String group);
 
+    /**
+     * Gets all groups of the server
+     *
+     * @return List of all groups
+     */
+    List<String> getAllGroups();
+
+
 }
