@@ -639,6 +639,19 @@ public class LuckApi implements PermissionApi {
         });
     }
 
+    @Override
+    public List<String> getAllGroups() {
+        try {
+            return executorService.submit(() -> {
+                return api.getGroupManager().getLoadedGroups().stream()
+                        .map(Group::getName)
+                        .collect(Collectors.toList());
+            }).get();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     private User getUser(OfflinePlayer player) {
         try {
             return executorService.submit(() -> api.getUserManager().isLoaded(player.getUniqueId()) ?

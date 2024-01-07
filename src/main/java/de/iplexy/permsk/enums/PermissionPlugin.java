@@ -3,7 +3,7 @@ package de.iplexy.permsk.enums;
 public enum PermissionPlugin {
 
     LUCKPERMS("LuckPerms", "LuckApi"),
-    PERMISSIONSEX("PermissionsEx", "PexApi"),
+    //PERMISSIONSEX("PermissionsEx", "PexApi"),
     GROUPMANAGER("GroupManager", "GroupManagerApi"),
     ULTIMATEPERMISSIONS("UltimatePermissions", "UltimateApi");
 
