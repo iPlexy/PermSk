@@ -5,7 +5,7 @@ public enum PermissionPlugin {
     LUCKPERMS("LuckPerms", "LuckApi"),
     //PERMISSIONSEX("PermissionsEx", "PexApi"),
     GROUPMANAGER("GroupManager", "GroupManagerApi"),
-    ULTIMATEPERMISSIONS("UltimatePermissions", "UltimateApi");
+    ULTRAPERMISSIONS("UltraPermissions", "UltraApi");
 
     private String name;
     private String apiClass;
