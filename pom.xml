@@ -49,6 +49,10 @@
 
     <repositories>
         <repository>
+            <id>techscode</id>
+            <url>https://repo.techscode.com/repository/maven-releases/</url>
+        </repository>
+        <repository>
             <id>papermc-repo</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
@@ -98,6 +102,12 @@
             <groupId>com.github.ElgarL</groupId>
             <artifactId>groupmanager</artifactId>
             <version>3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>me.TechsCode</groupId>
+            <artifactId>UltraPermissionsAPI</artifactId>
+            <version>5.5.2</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
