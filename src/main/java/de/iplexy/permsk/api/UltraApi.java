@@ -157,12 +157,12 @@ public class UltraApi implements PermissionApi {
 
     @Override
     public void createGroup(String groupName) {
-        api.newGroup(groupName);
+        api.newGroup(groupName).create();
     }
 
     @Override
     public void createGroup(String groupName, List<String> parentGroups) {
-        api.newGroup(groupName);
+        api.newGroup(groupName).create();
         Group group = api.getGroups().name(groupName).orElseThrow();
         parentGroups.forEach(parent -> {
             Group parentGroup = api.getGroups().name(groupName).orElseThrow();
@@ -180,6 +180,7 @@ public class UltraApi implements PermissionApi {
         User user = api.getUsers().uuid(player.getUniqueId()).orElseThrow();
         Group group = api.getGroups().name(groupName).orElseThrow();
         user.addGroup(group);
+        Bukkit.broadcastMessage(group.getName());
     }
 
     @Override

@@ -22,9 +22,9 @@ import java.util.Arrays;
 @Name("Members of group")
 @Since("2.0.0-pre1")
 @Description("Returns the members of a group.")
-public class ExprGroupMembers extends SimpleExpression<String> {
+public class ExprGroupMembers extends SimpleExpression<OfflinePlayer> {
     static {
-        Skript.registerExpression(ExprGroupMembers.class, String.class, ExpressionType.PROPERTY,
+        Skript.registerExpression(ExprGroupMembers.class, OfflinePlayer.class, ExpressionType.PROPERTY,
                 "[permsk] [all] members of group %string% [in [world] %-world%]",
                 "[permsk] group %string%'s members [in [world] %-world%]");
     }
@@ -42,18 +42,20 @@ public class ExprGroupMembers extends SimpleExpression<String> {
     }
 
     @Override
-    protected String[] get(Event e) {
+    protected OfflinePlayer[] get(Event e) {
         if (this.world == null) {
-            return api.getPlayersInGroup(this.group.getSingle(e)).toArray(new String[0]);
+            return api.getPlayersInGroup(this.group.getSingle(e)).toArray(new OfflinePlayer[0]);
         } else {
-            return api.getPlayersInGroup(this.group.getSingle(e), this.world.getSingle(e)).toArray(new String[0]);
+            return api.getPlayersInGroup(this.group.getSingle(e), this.world.getSingle(e)).toArray(new OfflinePlayer[0]);
         }
     }
 
     @Override
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        if (mode == Changer.ChangeMode.ADD || mode == Changer.ChangeMode.REMOVE) {
-            return CollectionUtils.array(String[].class);
+        if (mode == Changer.ChangeMode.ADD ||
+                mode == Changer.ChangeMode.REMOVE ||
+                mode == Changer.ChangeMode.REMOVE_ALL) {
+            return CollectionUtils.array(OfflinePlayer[].class);
         }
         return null;
     }
@@ -76,14 +78,15 @@ public class ExprGroupMembers extends SimpleExpression<String> {
                 } else {
                     api.removePlayerFromGroup(player, group);
                 }
-            } else if (mode == Changer.ChangeMode.REMOVE_ALL) {
-                if (world != null) {
-                    api.getPlayersInGroup(group, world)
-                            .forEach(p -> api.removePlayerFromGroup(p, group));
-                } else {
-                    api.getPlayersInGroup(group)
-                            .forEach(p -> api.removePlayerFromGroup(p, group));
-                }
+            }
+        }
+        if (mode == Changer.ChangeMode.REMOVE_ALL) {
+            if (world != null) {
+                api.getPlayersInGroup(group, world)
+                        .forEach(p -> api.removePlayerFromGroup(p, group));
+            } else {
+                api.getPlayersInGroup(group)
+                        .forEach(p -> api.removePlayerFromGroup(p, group));
             }
         }
     }
@@ -94,8 +97,8 @@ public class ExprGroupMembers extends SimpleExpression<String> {
     }
 
     @Override
-    public Class<? extends String> getReturnType() {
-        return String.class;
+    public Class<? extends OfflinePlayer> getReturnType() {
+        return OfflinePlayer.class;
     }
 
     @Override

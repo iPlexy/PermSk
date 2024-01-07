@@ -18,7 +18,7 @@ import org.bukkit.event.Event;
 public class ExprAllGroups extends SimpleExpression<String> {
 
     static {
-        Skript.registerExpression(ExprGroupPerms.class, String.class, ExpressionType.PROPERTY,
+        Skript.registerExpression(ExprAllGroups.class, String.class, ExpressionType.PROPERTY,
                 "[permsk] [all] groups [of server]");
     }
 
