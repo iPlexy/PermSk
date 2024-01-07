@@ -9,7 +9,6 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
-import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import de.iplexy.permsk.PermSk;
@@ -33,7 +32,6 @@ public class ExprGroupMembers extends SimpleExpression<String> {
     private final PermissionApi api = PermSk.getPermissionApi();
     private Expression<String> group;
     private Expression<World> world;
-    private Expression<Timespan> time;
 
     @SuppressWarnings({"unchecked"})
     @Override
@@ -62,25 +60,30 @@ public class ExprGroupMembers extends SimpleExpression<String> {
 
     @Override
     public void change(Event e, Object[] delta, Changer.ChangeMode mode) {
-        OfflinePlayer[] players = delta == null ? null : Arrays.copyOf(delta, delta.length, OfflinePlayer[].class);
+        OfflinePlayer[] players = Arrays.copyOf(delta, delta.length, OfflinePlayer[].class);
         String group = this.group.getSingle(e);
         World world = this.world == null ? null : this.world.getSingle(e);
-        int sec = time == null ? 0 : ((int) time.getSingle(e).getTicks_i() / 20);
-        if (players == null) return;
         for (OfflinePlayer player : players) {
-            switch (mode) {
-                case ADD:
-                    if (world != null)
-                        api.addPlayerToGroup(player, group, world);
-                    else
-                        api.addPlayerToGroup(player, group);
-                    break;
-                case REMOVE:
-                    if (world != null)
-                        api.removePlayerFromGroup(player, group, world);
-                    else
-                        api.removePerm(player, group);
-                    break;
+            if (mode == Changer.ChangeMode.ADD) {
+                if (world != null) {
+                    api.addPlayerToGroup(player, group, world);
+                } else {
+                    api.addPlayerToGroup(player, group);
+                }
+            } else if (mode == Changer.ChangeMode.REMOVE) {
+                if (world != null) {
+                    api.removePlayerFromGroup(player, group, world);
+                } else {
+                    api.removePlayerFromGroup(player, group);
+                }
+            } else if (mode == Changer.ChangeMode.REMOVE_ALL) {
+                if (world != null) {
+                    api.getPlayersInGroup(group, world)
+                            .forEach(p -> api.removePlayerFromGroup(p, group));
+                } else {
+                    api.getPlayersInGroup(group)
+                            .forEach(p -> api.removePlayerFromGroup(p, group));
+                }
             }
         }
     }
