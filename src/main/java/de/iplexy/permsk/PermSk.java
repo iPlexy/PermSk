@@ -52,12 +52,6 @@ public class PermSk extends JavaPlugin {
     }
 
     private void loadDependencies() {
-        if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
-            sendConsoleMessage("<gold>Vault not found, ignoring syntaxes</gold>");
-        } else {
-            sendConsoleMessage("<green>Loaded dependency: Vault</green>");
-        }
-
         for (PermissionPlugin plugin : PermissionPlugin.values()) {
             if (Bukkit.getPluginManager().getPlugin(plugin.getName()) != null) {
                 loadApi(plugin.getName(), plugin.getApiClass());
