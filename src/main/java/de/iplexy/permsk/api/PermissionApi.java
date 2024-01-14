@@ -458,5 +458,10 @@ public interface PermissionApi {
      */
     List<String> getAllGroups();
 
+    void saveUser(OfflinePlayer player);
+
+    void removeAllPerms(OfflinePlayer player);
+    void removeAllPerms(String groupName);
+
 
 }

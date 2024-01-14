@@ -652,6 +652,29 @@ public class LuckApi implements PermissionApi {
         }
     }
 
+    @Override
+    public void saveUser(OfflinePlayer player) {
+        executorService.submit(() -> {
+            api.getUserManager().saveUser(getUser(player));
+        });
+    }
+
+    @Override
+    public void removeAllPerms(OfflinePlayer player) {
+        executorService.submit(() -> {
+            User user = getUser(player);
+            user.getCachedData().getPermissionData().getPermissionMap().clear();
+            user.getCachedData().getPermissionData().invalidateCache();
+        });
+    }
+
+    @Override
+    public void removeAllPerms(String groupName) {
+        executorService.submit(() -> {
+            api.getGroupManager().getGroup(groupName).getCachedData().getPermissionData().getPermissionMap().clear();
+        });
+    }
+
     private User getUser(OfflinePlayer player) {
         try {
             return executorService.submit(() -> api.getUserManager().isLoaded(player.getUniqueId()) ?
