@@ -30,3 +30,4 @@ We welcome contributions from the community to improve and expand PermSk's capab
 
 
 [![SkriptHubViewTheDocs](http://skripthub.net/static/addon/ViewTheDocsButton.png)](http://skripthub.net/docs/?addon=PermSk)
+[![Get on skUnity](https://docs.skunity.com/skunity/library/Docs/Assets/assets/images/buttons/v2/get-the-syntax-white.png)](https://docs.skunity.com/syntax/search/addon:PermSk)
