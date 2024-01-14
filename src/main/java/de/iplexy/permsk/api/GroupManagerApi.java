@@ -414,4 +414,19 @@ public class GroupManagerApi implements PermissionApi {
                 .map(Group::getName)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void saveUser(OfflinePlayer player) {
+        //NO NEED
+    }
+
+    @Override
+    public void removeAllPerms(OfflinePlayer player) {
+
+    }
+
+    @Override
+    public void removeAllPerms(String groupName) {
+
+    }
 }

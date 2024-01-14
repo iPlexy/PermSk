@@ -13,6 +13,7 @@ import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import de.iplexy.permsk.PermSk;
 import de.iplexy.permsk.api.PermissionApi;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.event.Event;
@@ -53,7 +54,7 @@ public class ExprPlayerPerms extends SimpleExpression<String> {
 
     @Override
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        if (mode == Changer.ChangeMode.ADD || mode == Changer.ChangeMode.REMOVE) {
+        if (mode == Changer.ChangeMode.ADD || mode == Changer.ChangeMode.REMOVE || mode == Changer.ChangeMode.RESET) {
             return CollectionUtils.array(String[].class);
         }
         return null;
@@ -75,11 +76,13 @@ public class ExprPlayerPerms extends SimpleExpression<String> {
                             api.addPerm(player, perm, world);
                         else
                             api.addPerm(player, perm);
+                        api.saveUser(player);
                     } else {
                         if (world != null)
                             api.addPerm(player, perm, world, sec);
                         else
                             api.addPerm(player, perm, sec);
+                        api.saveUser(player);
                     }
                 }
                 break;
@@ -90,8 +93,12 @@ public class ExprPlayerPerms extends SimpleExpression<String> {
                         api.removePerm(player, perm, world);
                     else
                         api.removePerm(player, perm);
+                    api.saveUser(player);
                 }
                 break;
+            case RESET:
+                api.removeAllPerms(player);
+                api.saveUser(player);
         }
     }
 
