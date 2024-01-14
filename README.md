@@ -28,6 +28,7 @@ Explore the PermSk documentation on the GitHub repository for detailed instructi
 Contributing:
 We welcome contributions from the community to improve and expand PermSk's capabilities. Feel free to submit issues, feature requests, or pull requests on the GitHub repository.
 
-
-[![SkriptHubViewTheDocs](http://skripthub.net/static/addon/ViewTheDocsButton.png)](http://skripthub.net/docs/?addon=PermSk)
 [![Get on skUnity](https://docs.skunity.com/skunity/library/Docs/Assets/assets/images/buttons/v2/get-the-syntax-white.png)](https://docs.skunity.com/syntax/search/addon:PermSk)
+ 
+[![SkriptHubViewTheDocs](http://skripthub.net/static/addon/ViewTheDocsButton.png)](http://skripthub.net/docs/?addon=PermSk)
+
