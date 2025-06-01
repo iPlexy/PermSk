@@ -2,7 +2,8 @@ package de.iplexy.permsk.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import de.iplexy.permsk.SkPerm;
+import de.iplexy.permsk.PermSk;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -19,17 +20,22 @@ import java.util.function.Consumer;
 public class UpdateChecker implements Listener {
 
     private static String UPDATE_VERSION;
+    private final PermSk plugin;
+
+    public UpdateChecker(PermSk plugin) {
+        this.plugin = plugin;
+    }
 
     public static void checkForUpdate(String pluginVersion) {
-        SkPerm.sendConsoleMessage("Checking for update...");
+        PermSk.sendConsoleMessage("Checking for update...");
         getVersion(version -> {
             if (version.equalsIgnoreCase(pluginVersion)) {
-                SkPerm.sendConsoleMessage("&aPlugin is up to date!");
+                PermSk.sendConsoleMessage("<green>Plugin is up to date!");
             } else {
-                SkPerm.sendConsoleMessage("&cPlugin is not up to date!");
-                SkPerm.sendConsoleMessage(" - Current version: &cv"+ pluginVersion);
-                SkPerm.sendConsoleMessage(" - Available update: &av"+ version);
-                SkPerm.sendConsoleMessage(" - Download available at: https://github.com/iPlexy/PermSk/releases");
+                PermSk.sendConsoleMessage("<red>Plugin is not up to date!");
+                PermSk.sendConsoleMessage(" - Current version: <red>v" + pluginVersion);
+                PermSk.sendConsoleMessage(" - Available update: <green>v" + version);
+                PermSk.sendConsoleMessage(" - Download available at: https://github.com/iPlexy/PermSk/releases");
                 UPDATE_VERSION = version;
             }
         });
@@ -43,14 +49,8 @@ public class UpdateChecker implements Listener {
             String tag_name = jsonObject.get("tag_name").getAsString();
             consumer.accept(tag_name);
         } catch (IOException e) {
-            SkPerm.sendConsoleMessage("&cChecking for update failed!");
+            PermSk.sendConsoleMessage("&cChecking for update failed!");
         }
-    }
-
-    private final SkPerm PLUGIN;
-
-    public UpdateChecker(SkPerm plugin) {
-        this.PLUGIN = plugin;
     }
 
     @EventHandler
@@ -60,9 +60,9 @@ public class UpdateChecker implements Listener {
         Player player = event.getPlayer();
         if (!player.hasPermission("permsk.update.check")) return;
 
-        Bukkit.getScheduler().runTaskLater(PLUGIN, bukkitTask -> {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&',"&7[&bPerm&3Sk&7] update available: &a" + UPDATE_VERSION));
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&',"&7[&bPerm&3Sk&7] download at &bhttps://github.com/iPlexy/PermSk/releases"));
+        Bukkit.getScheduler().runTaskLater(plugin, bukkitTask -> {
+            player.sendMessage(Component.text(ChatColor.translateAlternateColorCodes('&', "&7[&bPerm&3Sk&7] Update available: &a" + UPDATE_VERSION)));
+            player.sendMessage(Component.text(ChatColor.translateAlternateColorCodes('&', "&7[&bPerm&3Sk&7] Download at &bhttps://github.com/iPlexy/PermSk/releases")));
         }, 60);
     }
 
