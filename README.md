@@ -9,7 +9,8 @@
 
 **PermSk - LuckPerms Integration for Skript**
 
-PermSk is a powerful Minecraft Skript addon designed to seamlessly integrate LuckPerms, and anticipate support for additional permission plugins in the future. Skript, a popular scripting plugin for Minecraft servers, gains enhanced permission management capabilities through PermSk, offering server administrators greater control and flexibility.
+PermSk is a powerful Minecraft Skript addon designed to seamlessly integrate LuckPerms, and anticipate support for additional permission plugins in the future. The Addon is running on over 100 Servers.
+Skript, a popular scripting plugin for Minecraft servers, gains enhanced permission management capabilities through PermSk, offering server administrators greater control and flexibility.
 
 **Key Features:**
 LuckPerms Integration: PermSk bridges the functionality of Skript with LuckPerms, allowing server owners to leverage the advanced permission management features of LuckPerms directly within their Skript scripts.
