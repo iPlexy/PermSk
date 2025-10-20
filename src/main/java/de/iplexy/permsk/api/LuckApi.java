@@ -1,11 +1,18 @@
 package de.iplexy.permsk.api;
 
+import de.iplexy.permsk.PermSk;
+import de.iplexy.permsk.api.events.GroupAddEvent;
+import de.iplexy.permsk.api.events.GroupRemoveEvent;
+import de.iplexy.permsk.api.events.PermissionAddEvent;
+import de.iplexy.permsk.api.events.PermissionRemoveEvent;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.context.DefaultContextKeys;
 import net.luckperms.api.context.ImmutableContextSet;
+import net.luckperms.api.event.node.NodeAddEvent;
+import net.luckperms.api.event.node.NodeRemoveEvent;
 import net.luckperms.api.model.data.DataMutateResult;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
@@ -22,6 +29,7 @@ import net.luckperms.api.query.QueryOptions;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -30,6 +38,54 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class LuckApi implements PermissionApi {
+
+    public void init() {
+        api.getEventBus().subscribe(PermSk.getInstance(), NodeAddEvent.class, event -> {
+
+            Player player = null;
+            String group = null;
+            if (event.getTarget() instanceof User user) {
+                player = Bukkit.getPlayer(user.getUniqueId());
+            } else if (event.getTarget() instanceof Group groupNode) {
+                group = groupNode.getName();
+            }
+
+            if (event.getNode() instanceof InheritanceNode groupNode) {
+                String groupName = groupNode.getGroupName();
+                Bukkit.getPluginManager().callEvent(
+                        new GroupAddEvent(player, groupName)
+                );
+            } else {
+                String permission = event.getNode().getKey();
+                Bukkit.getPluginManager().callEvent(
+                        new PermissionAddEvent(player, group, permission)
+                );
+            }
+        });
+
+        api.getEventBus().subscribe(PermSk.getInstance(), NodeRemoveEvent.class, event -> {
+
+            Player player = null;
+            String group = null;
+            if (event.getTarget() instanceof User user) {
+                player = Bukkit.getPlayer(user.getUniqueId());
+            } else if (event.getTarget() instanceof Group groupNode) {
+                group = groupNode.getName();
+            }
+
+            if (event.getNode() instanceof InheritanceNode groupNode) {
+                String groupName = groupNode.getGroupName();
+                Bukkit.getPluginManager().callEvent(
+                        new GroupRemoveEvent(player, groupName)
+                );
+            } else {
+                String permission = event.getNode().getKey();
+                Bukkit.getPluginManager().callEvent(
+                        new PermissionRemoveEvent(player, group, permission)
+                );
+            }
+        });
+    }
 
     private final LuckPerms api = LuckPermsProvider.get();
     @Getter(AccessLevel.PUBLIC)
@@ -642,11 +698,9 @@ public class LuckApi implements PermissionApi {
     @Override
     public List<String> getAllGroups() {
         try {
-            return executorService.submit(() -> {
-                return api.getGroupManager().getLoadedGroups().stream()
-                        .map(Group::getName)
-                        .collect(Collectors.toList());
-            }).get();
+            return executorService.submit(() -> api.getGroupManager().getLoadedGroups().stream()
+                    .map(Group::getName)
+                    .collect(Collectors.toList())).get();
         } catch (Exception e) {
             return null;
         }

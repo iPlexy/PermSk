@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface PermissionApi {
 
+    void init();
+
     /**
      * Add a permission to a player
      *

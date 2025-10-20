@@ -6,7 +6,7 @@
 
     <groupId>de.iplexy</groupId>
     <artifactId>PermSk</artifactId>
-    <version>2.0.0-pre2</version>
+    <version>2.1.0</version>
     <packaging>jar</packaging>
 
     <name>PermSk</name>
@@ -50,7 +50,7 @@
     <repositories>
         <repository>
             <id>techscode</id>
-            <url>https://repo.techscode.com/repository/maven-releases/</url>
+            <url>https://repo.techscode.com/repository/techscode-apis/</url>
         </repository>
         <repository>
             <id>papermc-repo</id>
@@ -102,12 +102,6 @@
             <groupId>com.github.ElgarL</groupId>
             <artifactId>groupmanager</artifactId>
             <version>3.2</version>
-        </dependency>
-        <dependency>
-            <groupId>me.TechsCode</groupId>
-            <artifactId>UltraPermissionsAPI</artifactId>
-            <version>5.5.2</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

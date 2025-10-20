@@ -4,13 +4,20 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
 import de.iplexy.permsk.api.LuckApi;
 import de.iplexy.permsk.api.PermissionApi;
+import de.iplexy.permsk.api.events.GroupAddEvent;
+import de.iplexy.permsk.elements.events.EvtGroupAdd;
 import de.iplexy.permsk.enums.PermissionPlugin;
 import de.iplexy.permsk.utils.BStats;
 import de.iplexy.permsk.utils.UpdateChecker;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.event.node.NodeAddEvent;
+import net.luckperms.api.model.user.User;
+import net.luckperms.api.node.types.InheritanceNode;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PermSk extends JavaPlugin {
@@ -64,7 +71,9 @@ public class PermSk extends JavaPlugin {
         try {
             addon.loadClasses("de.iplexy.permsk", "elements");
             permissionApi = (PermissionApi) Class.forName("de.iplexy.permsk.api." + apiClass).getConstructor().newInstance();
+            permissionApi.init();
             permissionPlugin = permPlugin;
+
             sendConsoleMessage("<green>Loaded dependency: " + permPlugin + "</green>");
         } catch (Exception e) {
             throw new RuntimeException(e);

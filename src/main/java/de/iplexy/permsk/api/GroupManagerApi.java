@@ -21,6 +21,11 @@ public class GroupManagerApi implements PermissionApi {
     private final GroupManager groupManager = (GroupManager) PermSk.getInstance().getServer().getPluginManager().getPlugin("GroupManager");
 
     @Override
+    public void init() {
+
+    }
+
+    @Override
     public void addPerm(OfflinePlayer player, String permission) {
         String uuid = player.getUniqueId().toString();
         final OverloadedWorldHolder handler = groupManager.getWorldsHolder().getDefaultWorld();
